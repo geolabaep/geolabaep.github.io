@@ -1,0 +1,45 @@
+name: Actualizar datos desde DMH
+
+on:
+  schedule:
+    - cron: '15 11,13,15,17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-dmh
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Consultar, validar y actualizar
+        run: node automation/dmh-sync.js
+
+      - name: Probar parser y sintaxis
+        run: |
+          node automation/test-dmh.js
+          node --check data/datos.js
+          find js -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Publicar solamente si existen cambios
+        run: |
+          if git diff --quiet -- data/datos.js; then
+            echo "DMH todavía no publicó cambios."
+            exit 0
+          fi
+          git config user.name "GEOlab Bot Hidrológico"
+          git config user.email "geolab.aep@gmail.com"
+          git add data/datos.js
+          git commit -m "Datos DMH actualizados automáticamente"
+          git push
