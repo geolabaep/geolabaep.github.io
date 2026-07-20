@@ -1,11 +1,11 @@
 
 /* ==========================================================
-   CONFIGURACIÓN CENTRAL · v3.7.2
+   CONFIGURACIÓN CENTRAL · v3.7.3
    Núcleo compartido: estado, persistencia, índices y utilidades.
    Mantiene compatibilidad de almacenamiento con versiones anteriores.
    ========================================================== */
 const APP_CONFIG = Object.freeze({
-  version: '3.7.2',
+  version: '3.7.3',
   staleDataDays: 10,
   storageKey: 'rios_py_boletines_publicacion',
   defaultTrendPeriod: 7,
@@ -23,7 +23,6 @@ let state = {
   marcador: {},
   map: null,
   mapLegendEl: null,
-  mapPanoramaEl: null,
   mapMode: 'daily',
   mapTrendPeriod: APP_CONFIG.defaultTrendPeriod,
   mapMovement: 'all',

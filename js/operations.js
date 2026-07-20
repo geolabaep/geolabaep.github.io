@@ -199,10 +199,6 @@ function analyticalDetailHtml(a){
  const changes=a.changes.length?a.changes.map(x=>item('•',x)).join(''):item('•','No se identifican cambios relevantes respecto a la actualización anterior.');
  return `<div class="ops-analysis-card"><div class="ops-analysis-head"><div><h3>Lectura analítica nacional</h3><div class="ops-compact-sub">Interpretación automática mediante reglas transparentes; no constituye pronóstico ni alerta oficial.</div></div><span class="ops-analysis-tag">Experimental</span></div><div class="ops-analysis-columns"><div><div class="ops-synthesis-label">Comportamiento por río</div><div class="ops-analysis-list">${a.riverStatements.map(x=>item('•',x)).join('')}</div></div><div><div class="ops-synthesis-label">Qué cambió desde la fecha anterior</div><div class="ops-analysis-list">${changes}</div></div></div><div class="ops-synthesis-label" style="margin-top:11px">Persistencia de la señal</div><div class="ops-streak-grid">${streak('Ascenso más persistente',a.strongestUp)}${streak('Descenso más persistente',a.strongestDown)}${streak('Estabilidad más persistente',a.strongestStable)}</div></div>`;
 }
-function updateMapPanorama(){
- if(!state.mapPanoramaEl)return;const a=analyzeHydrology();state.mapPanoramaEl.innerHTML=`<div class="map-panorama-kicker">Panorama nacional</div><div class="map-panorama-title">${a.dominant}</div><div class="map-panorama-text">${a.counts.down} bajan · ${a.counts.up} suben · ${a.counts.stable} estables. Variación media ${formatDelta(a.avg,{icon:true})}.</div><div class="map-panorama-meta"><span>${a.c.actualizadas}/${a.c.total} actualizadas</span><span>${fmtDate(state.fechaVista)}</span></div>`;
-}
-function addMapPanorama(){const control=L.control({position:'topleft'});control.onAdd=function(){const div=L.DomUtil.create('div','map-panorama');state.mapPanoramaEl=div;L.DomEvent.disableClickPropagation(div);updateMapPanorama();return div};control.addTo(state.map)}
 
 function opsSynthesisHtml(c,pct,trendTxt,ex,semanal,mensual,revisar,subidas,bajadas,rios){
  const reviewTotal=c.desactualizadas+c.sinDato;

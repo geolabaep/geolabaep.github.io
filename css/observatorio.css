@@ -591,14 +591,9 @@
 .ops-streak-card small{display:block;color:var(--muted);font-size:9.5px;text-transform:uppercase;letter-spacing:.3px}
 .ops-streak-card b{display:block;font-size:13px;margin-top:5px}
 .ops-streak-card span{display:block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:900;margin-top:4px}
-.map-panorama{width:280px;background:rgba(8,29,44,.93);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:11px 12px;color:var(--text);font-family:Inter,sans-serif;backdrop-filter:blur(8px)}
-.map-panorama-kicker{font-size:9.5px;color:#9fc07c;text-transform:uppercase;letter-spacing:.48px;font-weight:900}
-.map-panorama-title{font-family:Fraunces,serif;font-size:15px;margin-top:4px;line-height:1.15}
-.map-panorama-text{font-size:10.8px;color:var(--muted);line-height:1.38;margin-top:5px}
-.map-panorama-meta{display:flex;justify-content:space-between;gap:8px;border-top:1px solid rgba(242,239,233,.09);margin-top:8px;padding-top:7px;font-size:9.8px;color:var(--muted)}
 .ihn-meter{height:7px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:8px}.ihn-meter>span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));border-radius:999px}
 @media(max-width:1350px){.ops-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ops-analytics-lead{grid-column:1/-1}}
-@media(max-width:760px){.ops-analysis-columns,.ops-streak-grid,.ops-analytics-grid{grid-template-columns:1fr}.ops-analytics-lead{grid-column:auto}.map-panorama{width:235px}}
+@media(max-width:760px){.ops-analysis-columns,.ops-streak-grid,.ops-analytics-grid{grid-template-columns:1fr}.ops-analytics-lead{grid-column:auto}}
 
 
 /* v1.7.3 · Exploración temporal y metodología actualizada */
