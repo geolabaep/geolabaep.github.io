@@ -1,0 +1,12 @@
+'use strict';
+const assert=require('assert');
+const {parseDmhHtml}=require('./dmh-parser');
+const names=['Puerto Ladario - Brasil','Puerto Murtinho - Brasil','Cáceres - Brasil','Isla Margarita','Fuerte Olimpo','Bahía Negra','Vallemi','Concepción','Rosario','Puerto Antequera','Villeta','Asunción','Ita Enramada','Humaitá','Alberdi','Pilar','Puerto Tigre','Salto del Guairá','Ciudad del Este','Cerrito','Ita Pirú','Paso de Patria','Ayolas','Panchito López','Coratei','Ita Corá','San Cosme y San Damían','Encarnación','Pozo Hondo','Villa Florida','Estación Arirai'];
+const rows=names.map((name,index)=>`<tr><td>${name}</td><td>${index===18?'19':'20'}-07-2026</td><td>${(1+index/10).toFixed(2)} m</td><td><i class="fa fa-arrow-down"></i>-2 cm</td><td>-0.50m --> 01-01-2020</td><td>10.50m --> 02-02-2021</td><td>VER MÁS</td></tr>`).join('');
+const html=`<!doctype html><html><body><h1>ESTACIONES CONVENCIONALES</h1><table><tbody>${rows}</tbody></table></body></html>${' '.repeat(1200)}`;
+const parsed=parseDmhHtml(html);
+assert.strictEqual(parsed.observations.length,31);assert.strictEqual(parsed.latestDate,'2026-07-20');
+assert.strictEqual(parsed.observations.find(row=>row.id==='cde').fecha,'2026-07-19');
+assert.strictEqual(parsed.observations.find(row=>row.id==='asuncion').variacion,-0.02);
+assert.throws(()=>parseDmhHtml('<h1>ESTACIONES CONVENCIONALES</h1>'),/demasiado corta/);
+console.log(JSON.stringify({pruebas:5,estaciones:parsed.observations.length,fecha:parsed.latestDate},null,2));

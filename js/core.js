@@ -1,11 +1,11 @@
 
 /* ==========================================================
-   CONFIGURACIÓN CENTRAL · v3.6.2
+   CONFIGURACIÓN CENTRAL · v3.7.0
    Núcleo compartido: estado, persistencia, índices y utilidades.
    Mantiene compatibilidad de almacenamiento con versiones anteriores.
    ========================================================== */
 const APP_CONFIG = Object.freeze({
-  version: '3.6.2',
+  version: '3.7.0',
   staleDataDays: 10,
   storageKey: 'rios_py_boletines_publicacion',
   defaultTrendPeriod: 7,
@@ -118,7 +118,7 @@ function mergeSeedBulletin(existing,seed){
  return merged;
 }
 function load(){
- state.boletines=[VILLA_FLORIDA_PUNTUAL,...SEEDS,...EXTRA_SEEDS]
+ state.boletines=[VILLA_FLORIDA_PUNTUAL,...SEEDS,...EXTRA_SEEDS,...DMH_AUTO_SEEDS]
   .filter(seed=>seed&&typeof seed.fecha==='string'&&seed.estaciones&&typeof seed.estaciones==='object')
   .map(seed=>{const base=JSON.parse(JSON.stringify(seed));base.estado='publicado';return base});
  state.boletines.forEach(b=>{if(b.fecha!=='2025-02-28'&&b.estaciones?.villa_florida)delete b.estaciones.villa_florida});

@@ -1,10 +1,10 @@
 
 /* ==========================================================
-   CAPA DE DATOS EMBEBIDOS · v3.6.2
+   CAPA DE DATOS EMBEBIDOS · v3.7.0
    Separada de la lógica de interfaz para facilitar una futura
    migración a CSV/JSON sin cambiar los módulos visuales.
    ========================================================== */
-const APP_VERSION = "3.6.2";
+const APP_VERSION = "3.7.0";
 const SERIES_DESDE = "2026-06-06";
 
 const ESTACIONES_BASE = [
@@ -1577,10 +1577,17 @@ SEEDS.push(
 }
 );
 
+/* DMH_AUTO_START
+   Este bloque es mantenido exclusivamente por automation/dmh-sync.js.
+   No editar manualmente: cada entrada conserva la fecha real de su estación. */
+const DMH_AUTO_SEEDS = [
+];
+/* DMH_AUTO_END */
+
 window.OBSERVATORIO_DATA_INFO = Object.freeze({
   version: APP_VERSION,
   seriesDesde: SERIES_DESDE,
   estaciones: ESTACIONES_BASE.length,
-  semillas: SEEDS.length + EXTRA_SEEDS.length + 1,
-  ultimaFecha: SEEDS.at(-1)?.fecha || null
+  semillas: SEEDS.length + EXTRA_SEEDS.length + DMH_AUTO_SEEDS.length + 1,
+  ultimaFecha: [...SEEDS,...DMH_AUTO_SEEDS].at(-1)?.fecha || null
 });
