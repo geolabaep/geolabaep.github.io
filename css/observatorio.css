@@ -847,7 +847,13 @@
   .metrics,.metrics.compact-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
   .metric{padding:8px}
   .date-controls{grid-template-columns:1fr}
-  .map-legend{min-width:0;width:min(220px,calc(100vw - 28px));padding:9px 10px}
+  .leaflet-bottom.leaflet-left{bottom:0}
+  .map-legend{min-width:0!important;max-width:none!important;width:auto!important;padding:5px!important;border-radius:10px!important}
+  .map-legend-head,.map-legend-section-title,.map-legend-section:last-child{display:none}
+  .map-legend-section{padding:0!important;border:0!important}
+  .map-legend-directions{display:grid;grid-template-columns:repeat(3,auto)!important;gap:4px}
+  .map-legend-direction{padding:4px 6px;font-size:9px;gap:4px;border-radius:7px}
+  .map-legend-arrow{font-size:13px}
   .map-filter-box{width:calc(100vw - 24px);max-width:330px}
   .leaflet-control-zoom a{width:36px!important;height:36px!important;line-height:36px!important}
   .popup-card{width:min(300px,calc(100vw - 42px))}
