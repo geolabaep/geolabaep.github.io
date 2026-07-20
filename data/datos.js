@@ -1,10 +1,10 @@
 
 /* ==========================================================
-   CAPA DE DATOS EMBEBIDOS · v3.7.0
+   CAPA DE DATOS EMBEBIDOS · v3.7.1
    Separada de la lógica de interfaz para facilitar una futura
    migración a CSV/JSON sin cambiar los módulos visuales.
    ========================================================== */
-const APP_VERSION = "3.7.0";
+const APP_VERSION = "3.7.1";
 const SERIES_DESDE = "2026-06-06";
 
 const ESTACIONES_BASE = [
