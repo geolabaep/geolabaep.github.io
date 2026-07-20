@@ -1,11 +1,11 @@
 
 /* ==========================================================
-   CONFIGURACIÓN CENTRAL · v3.6.1
+   CONFIGURACIÓN CENTRAL · v3.6.2
    Núcleo compartido: estado, persistencia, índices y utilidades.
    Mantiene compatibilidad de almacenamiento con versiones anteriores.
    ========================================================== */
 const APP_CONFIG = Object.freeze({
-  version: '3.6.1',
+  version: '3.6.2',
   staleDataDays: 10,
   storageKey: 'rios_py_boletines_publicacion',
   defaultTrendPeriod: 7,
@@ -129,6 +129,17 @@ function save(){ return false; }
 function boletin(fecha=state.fechaVista){return DATA_INDEX.byDate.get(fecha)||null}
 function latest(){return DATA_INDEX.byDate.get(DATA_INDEX.dates.at(-1))||null}
 function stationData(id,fecha=state.fechaVista){return DATA_INDEX.byDate.get(fecha)?.estaciones?.[id]||null}
+/* Consultas compartidas por el visor público y el maestro. Deben vivir en el
+   núcleo: el módulo update.js no se publica porque contiene edición. */
+function historial(id){return DATA_INDEX.series.get(id)||[]}
+function openStation(id){
+ setTab('history');
+ setTimeout(()=>{
+  const select=qs('#histStation');
+  if(select)select.value=id;
+  renderHistory(id);
+ },0);
+}
 function findLastOnOrBefore(rows,target,endExclusive=rows.length){let lo=0,hi=Math.min(endExclusive,rows.length)-1,ans=-1;while(lo<=hi){const mid=(lo+hi)>>1;if(rows[mid].fechaBoletin<=target){ans=mid;lo=mid+1}else hi=mid-1}return ans>=0?rows[ans]:null}
 function estadoEstacion(d,fecha){
   if(!d||d.nivel==null)return'sin';
