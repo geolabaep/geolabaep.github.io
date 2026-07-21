@@ -6,39 +6,72 @@ const vm=require('vm');
 const {parseDmhHtml}=require('./dmh-parser');
 
 const SOURCE='https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php';
+const SCHEMA_VERSION=1;
 const root=path.resolve(__dirname,'..');
-const dataArg=process.argv.find(value=>value.startsWith('--data='));
-const htmlArg=process.argv.find(value=>value.startsWith('--html='));
-const dataFile=dataArg?path.resolve(process.cwd(),dataArg.slice(7)):path.join(root,'data','datos.js');
+const argument=name=>process.argv.find(value=>value.startsWith(`--${name}=`))?.slice(name.length+3);
+const dataFile=path.resolve(process.cwd(),argument('data')||path.join(root,'data','datos.js'));
+const historyFile=path.resolve(process.cwd(),argument('history')||path.join(root,'data','historico-dmh.json'));
+const indexFile=path.resolve(process.cwd(),argument('index')||path.join(root,'index.html'));
+const htmlFile=argument('html');
 
 function readDataContext(source){
   const sandbox={window:{},console};sandbox.window=sandbox;vm.createContext(sandbox);
-  vm.runInContext(`${source}\nwindow.__DMH_SYNC__={SEEDS,EXTRA_SEEDS,DMH_AUTO_SEEDS,VILLA_FLORIDA_PUNTUAL};`,sandbox,{timeout:3000});
+  vm.runInContext(`${source}\nwindow.__DMH_SYNC__={DMH_AUTO_SEEDS};`,sandbox,{timeout:3000});
   return sandbox.__DMH_SYNC__;
 }
-function comparable(item){return {nivel:Number(item.nivel),variacion:Number(item.variacion),fecha:item.fecha};}
+function comparable(item){return {nivel:Number(item.nivel),variacion:Number(item.variacion),fecha:item.fecha,estado:item.estado||undefined};}
 function sameBulletin(existing,next){
-  if(!existing)return false;const a=existing.estaciones||{},b=next.estaciones||{};
-  return Object.keys(b).every(id=>a[id]&&JSON.stringify(comparable(a[id]))===JSON.stringify(comparable(b[id])));
+  if(!existing)return false;const a=existing.estaciones||{},b=next.estaciones||{},ids=Object.keys(b);
+  return ids.length===Object.keys(a).length&&ids.every(id=>a[id]&&JSON.stringify(comparable(a[id]))===JSON.stringify(comparable(b[id])));
 }
-function formatSeeds(seeds){return JSON.stringify(seeds,null,2).replace(/"([a-z_]+)":/g,'$1:');}
-function updateSource(source,parsed){
-  const data=readDataContext(source),bulletin={fecha:parsed.latestDate,estaciones:{}};
+function validBulletin(seed){return seed&&/^\d{4}-\d{2}-\d{2}$/.test(seed.fecha)&&seed.estaciones&&typeof seed.estaciones==='object';}
+function emptyHistory(){return {schemaVersion:SCHEMA_VERSION,fuente:SOURCE,actualizadoEn:null,boletines:[]};}
+function readHistory(dataSource){
+  let history=emptyHistory();
+  if(fs.existsSync(historyFile)){
+    history=JSON.parse(fs.readFileSync(historyFile,'utf8'));
+    if(history.schemaVersion!==SCHEMA_VERSION||!Array.isArray(history.boletines))throw new Error('El historial DMH tiene un formato incompatible.');
+  }
+  const migrated=readDataContext(dataSource).DMH_AUTO_SEEDS||[];
+  const byDate=new Map(history.boletines.filter(validBulletin).map(seed=>[seed.fecha,seed]));
+  for(const seed of migrated.filter(validBulletin))if(!byDate.has(seed.fecha))byDate.set(seed.fecha,seed);
+  history.boletines=[...byDate.values()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  history.fuente=SOURCE;
+  return history;
+}
+function bulletinFromParsed(parsed){
+  const bulletin={fecha:parsed.latestDate,estaciones:{}};
   for(const row of parsed.observations){
     bulletin.estaciones[row.id]={nivel:row.nivel,variacion:row.variacion,fecha:row.fecha};
     if(row.id==='villa_florida'&&row.fecha<parsed.latestDate)bulletin.estaciones[row.id].estado='antiguo';
   }
-  const all=[data.VILLA_FLORIDA_PUNTUAL,...data.SEEDS,...data.EXTRA_SEEDS,...data.DMH_AUTO_SEEDS];
-  const current=[...all].reverse().find(seed=>seed.fecha===bulletin.fecha);
-  if(sameBulletin(current,bulletin))return {source,changed:false,date:bulletin.fecha,count:Object.keys(bulletin.estaciones).length};
-  const seeds=data.DMH_AUTO_SEEDS.filter(seed=>seed.fecha!==bulletin.fecha);seeds.push(bulletin);seeds.sort((a,b)=>a.fecha.localeCompare(b.fecha));
-  const replacement=`/* DMH_AUTO_START\n   Este bloque es mantenido exclusivamente por automation/dmh-sync.js.\n   No editar manualmente: cada entrada conserva la fecha real de su estación. */\nconst DMH_AUTO_SEEDS = ${formatSeeds(seeds)};\n/* DMH_AUTO_END */`;
+  return bulletin;
+}
+function upsertHistory(history,bulletin){
+  const index=history.boletines.findIndex(seed=>seed.fecha===bulletin.fecha);
+  if(index>=0&&sameBulletin(history.boletines[index],bulletin))return {changed:false,mode:'sin_cambios'};
+  if(index>=0)history.boletines[index]=bulletin;else history.boletines.push(bulletin);
+  history.boletines.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  history.actualizadoEn=new Date().toISOString();
+  return {changed:true,mode:index>=0?'corregido':'agregado'};
+}
+function formatSeeds(seeds){return JSON.stringify(seeds,null,2).replace(/"([a-z_]+)":/g,'$1:');}
+function renderDataFromHistory(source,history){
+  const replacement=`/* DMH_AUTO_START\n   Bloque derivado de data/historico-dmh.json. No editar manualmente. */\nconst DMH_AUTO_SEEDS = ${formatSeeds(history.boletines)};\n/* DMH_AUTO_END */`;
   const updated=source.replace(/\/\* DMH_AUTO_START[\s\S]*?\/\* DMH_AUTO_END \*\//,replacement);
-  if(updated===source)throw new Error('No se encontró el bloque DMH_AUTO en datos.js.');
-  return {source:updated,changed:true,date:bulletin.fecha,count:Object.keys(bulletin.estaciones).length};
+  if(updated===source&&!source.includes(replacement))throw new Error('No se encontró el bloque DMH_AUTO en datos.js.');
+  return updated;
+}
+function updateIndexCacheKey(source,date){
+  const key=`dmh-${date.replaceAll('-','')}-${Date.now()}`;
+  return source.replace(/data\/datos\.js\?v=[^"']+/g,`data/datos.js?v=${key}`);
+}
+function writeAtomic(filename,content){
+  fs.mkdirSync(path.dirname(filename),{recursive:true});const temporary=`${filename}.tmp`;
+  fs.writeFileSync(temporary,content);fs.renameSync(temporary,filename);
 }
 async function fetchHtml(){
-  if(htmlArg)return fs.readFileSync(path.resolve(process.cwd(),htmlArg.slice(7)),'utf8');
+  if(htmlFile)return fs.readFileSync(path.resolve(process.cwd(),htmlFile),'utf8');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
   try{
     const response=await fetch(SOURCE,{signal:controller.signal,headers:{'user-agent':'GEOlab-Observatorio-Hidrologico/3.7 (+https://geolabaep.github.io/)','accept':'text/html'}});
@@ -47,9 +80,22 @@ async function fetchHtml(){
 }
 async function main(){
   if(!fs.existsSync(dataFile))throw new Error(`No existe el archivo de datos: ${dataFile}`);
-  const parsed=parseDmhHtml(await fetchHtml()),original=fs.readFileSync(dataFile,'utf8'),result=updateSource(original,parsed);
-  if(result.changed){const temporary=`${dataFile}.tmp`;fs.writeFileSync(temporary,result.source);fs.renameSync(temporary,dataFile);}
-  console.log(JSON.stringify({fuente:SOURCE,fecha:result.date,estaciones:result.count,desconocidas:parsed.unknown,actualizado:result.changed},null,2));
+  const parsed=parseDmhHtml(await fetchHtml()),originalData=fs.readFileSync(dataFile,'utf8');
+  const history=readHistory(originalData),bulletin=bulletinFromParsed(parsed),result=upsertHistory(history,bulletin);
+  const renderedData=renderDataFromHistory(originalData,history);
+  const historyText=JSON.stringify(history,null,2)+'\n';
+  const historyChanged=!fs.existsSync(historyFile)||fs.readFileSync(historyFile,'utf8')!==historyText;
+  const dataChanged=renderedData!==originalData;
+  if(historyChanged)writeAtomic(historyFile,historyText);
+  if(dataChanged)writeAtomic(dataFile,renderedData);
+  let indexChanged=false;
+  if((historyChanged||dataChanged)&&fs.existsSync(indexFile)){
+    const originalIndex=fs.readFileSync(indexFile,'utf8'),updatedIndex=updateIndexCacheKey(originalIndex,bulletin.fecha);
+    indexChanged=updatedIndex!==originalIndex;if(indexChanged)writeAtomic(indexFile,updatedIndex);
+  }
+  console.log(JSON.stringify({fuente:SOURCE,fecha:bulletin.fecha,estaciones:Object.keys(bulletin.estaciones).length,
+    boletinesGuardados:history.boletines.length,operacion:result.mode,archivos:{historial:historyChanged,datos:dataChanged,index:indexChanged},
+    desconocidas:parsed.unknown,actualizado:historyChanged||dataChanged||indexChanged},null,2));
 }
 if(require.main===module)main().catch(error=>{console.error(`[DMH] ${error.message}`);process.exitCode=1;});
-module.exports={readDataContext,sameBulletin,updateSource};
+module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,renderDataFromHistory,updateIndexCacheKey};

@@ -892,3 +892,82 @@
   button,.tab,.filter,.station-row,.ops-row,.ops-compact-row{touch-action:manipulation}
   input,select,textarea{font-size:16px}
 }
+
+/* v3.7.6 · historial móvil esencial y gráfico temporal sin recorte */
+.history-chart-viewport .chart{
+  height:auto;
+  min-height:285px;
+  overflow:visible;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.history-chart-viewport .chart-scroll{
+  height:285px;
+  min-height:285px;
+  overflow:visible;
+  padding:0;
+}
+.history-chart-viewport .chart-canvas{
+  display:block;
+  width:auto;
+  height:285px;
+  max-width:none;
+}
+
+@media(max-width:560px){
+  /* Cabecera: conserva identidad y navegación, omite metadatos repetidos. */
+  .header-meta{display:none}
+  .brand-text .sub:first-of-type{display:none}
+  .tabs{margin-top:7px}
+  .tab{min-height:38px;padding:8px 10px;font-size:10.5px}
+
+  /* Consulta: la estación y el período del gráfico son suficientes en teléfono. */
+  .history-intro .history-subtitle,.history-intro>.pill{display:none}
+  .history-intro{margin-bottom:8px}
+  .history-title{font-size:21px}
+  .history-query-panel{padding:9px}
+  .history-custom-control,.history-custom-apply{display:none!important}
+  .history-toolbar{display:block}
+  .history-station-control select{width:100%}
+
+  /* Resumen móvil: deja las decisiones principales y evita duplicaciones. */
+  .history-profile{padding:13px}
+  .history-profile-name{font-size:23px}
+  .history-current{font-size:32px;margin-top:12px}
+  .history-profile-note{font-size:11.5px}
+  .history-meta-grid{display:none}
+  .history-pager{display:none}
+  .history-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .history-kpi{padding:9px 7px}
+  .history-kpi:nth-child(n+4){display:none}
+  .history-kpi-label{font-size:8.5px;line-height:1.25}
+  .history-kpi-value{font-size:14px}
+  .history-kpi-detail{display:none}
+  .history-analysis-card:first-child{display:none}
+  .history-analysis{display:block;margin-bottom:10px}
+  .history-analysis-card{padding:11px}
+
+  /* Un único selector de período y un visor táctil de altura estable. */
+  .history-chart-head .small,.history-chart-head>.small{display:none}
+  .history-chart-title{font-size:17px}
+  .history-chart-tools-clean{padding:9px;margin:8px 0;display:block}
+  .history-visible-range,.history-chart-options,.history-period-note{display:none!important}
+  .history-chart-tools-clean>div:first-child label{display:none}
+  .history-chart-tools-clean select{min-height:44px}
+  .history-period-summary{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .history-period-chip{display:none}
+  .history-period-chip:first-child,.history-period-chip:nth-child(4){display:block;border-radius:10px;padding:7px}
+  .history-period-interpretation{font-size:11px;line-height:1.45}
+  .history-chart-viewport{margin-top:8px;scrollbar-gutter:auto;-webkit-overflow-scrolling:touch}
+  .history-chart-viewport .chart,.history-chart-viewport .chart-scroll{min-height:285px;height:285px}
+  .chart-hint{display:none}
+
+  /* Tabla de apoyo: fecha, nivel y cambio; el resto sigue disponible en escritorio. */
+  .history-table-scroll{max-height:310px}
+  .history-table-scroll .table{display:table;white-space:normal;overflow:visible}
+  .history-table-scroll th:nth-child(n+4),
+  .history-table-scroll td:nth-child(n+4){display:none}
+  .history-table-scroll th,.history-table-scroll td{padding:8px 6px;font-size:10.5px}
+}
