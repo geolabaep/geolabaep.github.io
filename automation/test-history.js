@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('assert');
-const {emptyHistory,upsertHistory,renderDataFromHistory,paraguayToday,sourceRequestUrl}=require('./dmh-sync');
+const {emptyHistory,upsertHistory,validateHistory,renderDataFromHistory,paraguayToday,sourceRequestUrl}=require('./dmh-sync');
 
 const station=(nivel,fecha='2026-07-20')=>({nivel,variacion:0,fecha});
 const first={fecha:'2026-07-20',estaciones:{puerto_ladario:station(2.56,'2026-07-19'),caceres:station(1.33,'2026-07-19')}};
@@ -19,4 +19,7 @@ const restored=renderDataFromHistory('/* DMH_AUTO_START\nconst DMH_AUTO_SEEDS = 
 assert.match(restored,/2026-07-20/);assert.match(restored,/2026-07-21/);assert.match(restored,/puerto_ladario/);
 assert.strictEqual(paraguayToday(new Date('2026-07-21T12:00:00Z')),'2026-07-21');
 assert.match(sourceRequestUrl(2),/_observatorio=\d+-2$/);
-console.log(JSON.stringify({pruebas:10,boletines:history.boletines.length,restauracion:true,anticache:true},null,2));
+assert.strictEqual(validateHistory(history,{minimumBulletins:2,minimumStations:2}),true);
+assert.throws(()=>validateHistory({...history,boletines:[history.boletines[0]]},{minimumBulletins:2,minimumStations:2}),/reducir/);
+assert.throws(()=>upsertHistory(history,{fecha:'2026-07-21',estaciones:{puerto_ladario:station(2.50,'2026-07-21')}}),/bajaría/);
+console.log(JSON.stringify({pruebas:13,boletines:history.boletines.length,restauracion:true,anticache:true,proteccionHistorial:true},null,2));

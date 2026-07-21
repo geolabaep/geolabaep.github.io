@@ -7,6 +7,7 @@ const {parseDmhHtml}=require('./dmh-parser');
 
 const SOURCE='https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php';
 const SCHEMA_VERSION=1;
+const MIN_STATIONS=30;
 const root=path.resolve(__dirname,'..');
 const argument=name=>process.argv.find(value=>value.startsWith(`--${name}=`))?.slice(name.length+3);
 const dataFile=path.resolve(process.cwd(),argument('data')||path.join(root,'data','datos.js'));
@@ -36,6 +37,25 @@ function sameBulletin(existing,next){
   return ids.length===Object.keys(a).length&&ids.every(id=>a[id]&&JSON.stringify(comparable(a[id]))===JSON.stringify(comparable(b[id])));
 }
 function validBulletin(seed){return seed&&/^\d{4}-\d{2}-\d{2}$/.test(seed.fecha)&&seed.estaciones&&typeof seed.estaciones==='object';}
+function validateHistory(history,{minimumBulletins=0,minimumStations=MIN_STATIONS}={}){
+  if(!history||history.schemaVersion!==SCHEMA_VERSION||!Array.isArray(history.boletines))throw new Error('El historial DMH tiene un formato incompatible.');
+  if(history.boletines.length<minimumBulletins)throw new Error(`Protección del historial: se intentó reducir de ${minimumBulletins} a ${history.boletines.length} boletines.`);
+  let previous='';const dates=new Set();
+  for(const bulletin of history.boletines){
+    if(!validBulletin(bulletin))throw new Error('El historial contiene un boletín inválido.');
+    if(dates.has(bulletin.fecha))throw new Error(`El historial contiene la fecha duplicada ${bulletin.fecha}.`);
+    if(previous&&bulletin.fecha<previous)throw new Error('Los boletines del historial no están ordenados cronológicamente.');
+    dates.add(bulletin.fecha);previous=bulletin.fecha;
+    const entries=Object.entries(bulletin.estaciones);
+    if(entries.length<minimumStations)throw new Error(`Cobertura histórica insuficiente en ${bulletin.fecha}: ${entries.length} estaciones (mínimo ${minimumStations}).`);
+    for(const [id,item] of entries){
+      if(!id||!item||!Number.isFinite(Number(item.nivel))||!Number.isFinite(Number(item.variacion))||!/^\d{4}-\d{2}-\d{2}$/.test(item.fecha||'')){
+        throw new Error(`Registro histórico inválido: ${bulletin.fecha}/${id||'sin_id'}.`);
+      }
+    }
+  }
+  return true;
+}
 function emptyHistory(){return {schemaVersion:SCHEMA_VERSION,fuente:SOURCE,actualizadoEn:null,boletines:[]};}
 function readHistory(dataSource){
   let history=emptyHistory();
@@ -61,6 +81,11 @@ function bulletinFromParsed(parsed){
 function upsertHistory(history,bulletin){
   const index=history.boletines.findIndex(seed=>seed.fecha===bulletin.fecha);
   if(index>=0&&sameBulletin(history.boletines[index],bulletin))return {changed:false,mode:'sin_cambios'};
+  if(index>=0){
+    const storedCount=Object.keys(history.boletines[index].estaciones||{}).length;
+    const incomingCount=Object.keys(bulletin.estaciones||{}).length;
+    if(incomingCount<storedCount)throw new Error(`Protección del historial: ${bulletin.fecha} bajaría de ${storedCount} a ${incomingCount} estaciones.`);
+  }
   if(index>=0)history.boletines[index]=bulletin;else history.boletines.push(bulletin);
   history.boletines.sort((a,b)=>a.fecha.localeCompare(b.fecha));
   history.actualizadoEn=new Date().toISOString();
@@ -108,7 +133,9 @@ async function fetchLatestParsed(){
 async function main(){
   if(!fs.existsSync(dataFile))throw new Error(`No existe el archivo de datos: ${dataFile}`);
   const parsed=await fetchLatestParsed(),originalData=fs.readFileSync(dataFile,'utf8');
+  const previousBulletinCount=fs.existsSync(historyFile)?JSON.parse(fs.readFileSync(historyFile,'utf8')).boletines?.length||0:0;
   const history=readHistory(originalData),bulletin=bulletinFromParsed(parsed),result=upsertHistory(history,bulletin);
+  validateHistory(history,{minimumBulletins:previousBulletinCount});
   const renderedData=renderDataFromHistory(originalData,history);
   const historyText=JSON.stringify(history,null,2)+'\n';
   const historyChanged=!fs.existsSync(historyFile)||fs.readFileSync(historyFile,'utf8')!==historyText;
@@ -129,4 +156,4 @@ async function main(){
   }
 }
 if(require.main===module)main().catch(error=>{console.error(`[DMH] ${error.message}`);process.exitCode=1;});
-module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,renderDataFromHistory,updateIndexCacheKey,paraguayToday,sourceRequestUrl};
+module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,validateHistory,renderDataFromHistory,updateIndexCacheKey,paraguayToday,sourceRequestUrl};

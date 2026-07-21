@@ -888,12 +888,31 @@
   .station-row{grid-template-columns:12px minmax(0,1fr) 58px 48px;gap:5px}
 }
 
+/* v3.8.0 · controles móviles compactos y simétricos */
+@media(max-width:760px){
+  .tabs{margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:visible;scroll-snap-type:none}
+  .tab{width:100%;min-width:0;min-height:34px;padding:6px 7px;border-radius:9px;font-size:10px;line-height:1.15;text-align:center;white-space:nowrap;display:flex;align-items:center;justify-content:center}
+  .btn{width:auto;min-height:36px;padding:7px 10px;font-size:12px}
+  .history-toolbar .btn,.update-toolbar .btn,.fields .btn{width:100%}
+  .map-filter-box{width:calc(100vw - 20px);max-width:350px;padding:9px}
+  .map-mode-row,.map-movement-row{display:grid;gap:6px}
+  .map-mode-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .map-movement-row{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .map-filter-btn{width:100%;min-width:0;min-height:34px;padding:6px 4px;font-size:10px;line-height:1.1;border-radius:8px}
+  .leaflet-control-zoom a{width:32px!important;height:32px!important;line-height:32px!important}
+}
+
+@media(max-width:390px){
+  .tab{font-size:9.4px;padding-inline:4px}
+  .map-filter-btn{font-size:9.4px}
+}
+
 @media(pointer:coarse){
   button,.tab,.filter,.station-row,.ops-row,.ops-compact-row{touch-action:manipulation}
   input,select,textarea{font-size:16px}
 }
 
-/* v3.7.7 · historial móvil esencial y gráfico temporal sin recorte */
+/* v3.8.0 · historial móvil esencial y gráfico temporal sin recorte */
 .history-chart-viewport .chart{
   height:auto;
   min-height:285px;

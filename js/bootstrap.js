@@ -18,7 +18,7 @@ function runRegressionChecks(){
  assert('fechas indexadas válidas',DATA_INDEX.dates.every(fecha=>/^\d{4}-\d{2}-\d{2}$/.test(fecha)));
  assert('boletines con estructura válida',state.boletines.every(b=>b&&b.estaciones&&typeof b.estaciones==='object'));
  assert('última actualización disponible',latest()?.fecha===window.OBSERVATORIO_DATA_INFO?.ultimaFecha);
- assert('red operativa completa',Object.keys(latest()?.estaciones||{}).length===30);
+ assert('red operativa completa',Object.keys(latest()?.estaciones||{}).length>=30);
  assert('fecha local estable',todayISO(new Date(2026,6,20,23,30))==='2026-07-20');
  const failed=checks.filter(test=>!test.ok);
  if(failed.length)console.error('[Observatorio] Fallaron pruebas de regresión:',failed);
