@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-  OBSERVATORIO HIDROLÓGICO DEL PARAGUAY · v3.8.1
+  OBSERVATORIO HIDROLÓGICO DEL PARAGUAY · v3.8.2
   EDICIÓN MODULAR AUDITADA · 20-07-2026
 
   Mapa interno del archivo:
@@ -17,17 +17,17 @@
   Esta fase no elimina funciones ni cambia la estructura de datos.
 -->
 <html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Observatorio Hidrológico del Paraguay · v3.8.1</title>
+<title>Observatorio Hidrológico del Paraguay · v3.8.2</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
 
-<link href="css/observatorio.css?v=3.8.1" rel="stylesheet"/>
-<!-- v3.8.1 modular: estilos, datos y lógica separados -->
-<meta name="robots" content="index,follow"><link rel="canonical" href="https://geolabaep.github.io/"><meta name="application-name" content="Observatorio Hidrológico del Paraguay"></head><body data-app-version="3.8.1"><div id="app"><header><div class="top"><div class="brand"><div class="logos"><div class="logo-box logo-aep"><img alt="Agencia Espacial del Paraguay" src="assets/logo-aep.png"/></div><div class="logo-box logo-geo"><img alt="GEO Lab" src="assets/logo-geolab.png"/></div></div><div class="brand-text"><h1>Observatorio Hidrológico del Paraguay</h1><div class="sub">Sistema para el monitoreo, análisis y gestión de niveles hidrométricos.</div><div class="sub">Desarrollado por el GEOlab de la Agencia Espacial del Paraguay</div></div></div><div class="header-meta"><div class="pill">Series operativas desde <strong>24/05/2026</strong></div><div class="pill">Fuente operativa: DMH / DINAC</div></div></div><div class="tabs"><button class="tab active" data-tab="monitor" type="button">🗺 Monitoreo</button><button class="tab" data-tab="ops" type="button">🚨 Centro operativo</button><button class="tab" data-tab="history" type="button">📊 Análisis / Historial</button><button class="tab" data-tab="method" type="button">📚 Metodología</button></div></header><main><section class="screen active" id="screen-monitor"><div id="map"></div><aside class="sidebar" id="sidebar-monitor"></aside></section><section class="screen" id="screen-history"><div class="workspace" id="history-content"></div></section><section class="screen" id="screen-ops"><div class="workspace" id="ops-content"></div></section><section class="screen" id="screen-method"><div class="workspace" id="method-content"></div></section></main></div>
+<link href="css/observatorio.css?v=3.8.2" rel="stylesheet"/>
+<!-- v3.8.2 modular: estilos, datos y lógica separados -->
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://geolabaep.github.io/"><meta name="application-name" content="Observatorio Hidrológico del Paraguay"></head><body data-app-version="3.8.2"><div id="app"><header><div class="top"><div class="brand"><div class="logos"><div class="logo-box logo-aep"><img alt="Agencia Espacial del Paraguay" src="assets/logo-aep.png"/></div><div class="logo-box logo-geo"><img alt="GEO Lab" src="assets/logo-geolab.png"/></div></div><div class="brand-text"><h1>Observatorio Hidrológico del Paraguay</h1><div class="sub">Sistema para el monitoreo, análisis y gestión de niveles hidrométricos.</div><div class="sub">Desarrollado por el GEOlab de la Agencia Espacial del Paraguay</div></div></div><div class="header-meta"><div class="pill">Series operativas desde <strong>24/05/2026</strong></div><div class="pill">Fuente operativa: DMH / DINAC</div></div></div><div class="tabs"><button class="tab active" data-tab="monitor" type="button">🗺 Monitoreo</button><button class="tab" data-tab="ops" type="button">🚨 Centro operativo</button><button class="tab" data-tab="history" type="button">📊 Análisis / Historial</button><button class="tab" data-tab="method" type="button">📚 Metodología</button></div></header><main><section class="screen active" id="screen-monitor"><div id="map"></div><aside class="sidebar" id="sidebar-monitor"></aside></section><section class="screen" id="screen-history"><div class="workspace" id="history-content"></div></section><section class="screen" id="screen-ops"><div class="workspace" id="ops-content"></div></section><section class="screen" id="screen-method"><div class="workspace" id="method-content"></div></section></main></div>
 <!--
 ===============================================================================
- OBSERVATORIO HIDROLÓGICO DEL PARAGUAY · v3.8.1
+ OBSERVATORIO HIDROLÓGICO DEL PARAGUAY · v3.8.2
 -------------------------------------------------------------------------------
  Arquitectura anti deuda técnica aplicada en esta versión:
   1) Datos base separados de la interfaz:
@@ -48,11 +48,11 @@
      - Evitar duplicar datos dentro de funciones de renderizado.
 ===============================================================================
 -->
-<script src="data/datos.js?v=3.8.1"></script>
-<script src="js/core.js?v=3.8.1"></script>
-<script src="js/map.js?v=3.8.1"></script>
+<script src="data/datos.js?v=3.8.2"></script>
+<script src="js/core.js?v=3.8.2"></script>
+<script src="js/map.js?v=3.8.2"></script>
 
-<script src="js/history.js?v=3.8.1"></script>
-<script src="js/operations.js?v=3.8.1"></script>
-<script src="js/events.js?v=3.8.1"></script>
-<script src="js/bootstrap.js?v=3.8.1"></script><footer class="app-footer">Observatorio Hidrológico del Paraguay · v3.8.1 · Series operativas desde 24/05/2026 · Julio 2026<span class="credit">Desarrollado por Ing. Thanya Idoyaga</span></footer></body></html>
+<script src="js/history.js?v=3.8.2"></script>
+<script src="js/operations.js?v=3.8.2"></script>
+<script src="js/events.js?v=3.8.2"></script>
+<script src="js/bootstrap.js?v=3.8.2"></script><footer class="app-footer">Observatorio Hidrológico del Paraguay · v3.8.2 · Series operativas desde 24/05/2026 · Julio 2026<span class="credit">Desarrollado por Ing. Thanya Idoyaga</span></footer></body></html>

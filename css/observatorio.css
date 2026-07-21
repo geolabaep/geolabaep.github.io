@@ -888,7 +888,7 @@
   .station-row{grid-template-columns:12px minmax(0,1fr) 58px 48px;gap:5px}
 }
 
-/* v3.8.1 · controles móviles compactos y simétricos */
+/* v3.8.2 · controles móviles compactos y simétricos */
 @media(max-width:760px){
   .tabs{margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:visible;scroll-snap-type:none}
   .tab{width:100%;min-width:0;min-height:34px;padding:6px 7px;border-radius:9px;font-size:10px;line-height:1.15;text-align:center;white-space:nowrap;display:flex;align-items:center;justify-content:center}
@@ -926,7 +926,82 @@
   input,select,textarea{font-size:16px}
 }
 
-/* v3.8.1 · historial móvil esencial y gráfico temporal sin recorte */
+/* v3.8.2 · fechas sin solapamiento y filtros del mapa a ancho completo */
+@media(max-width:760px){
+  .date-controls{
+    width:100%;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    align-items:end;
+  }
+  .date-controls>div{
+    width:100%;
+    min-width:0;
+    overflow:hidden;
+  }
+  .date-controls input,
+  .date-controls select{
+    display:block;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    height:38px;
+    padding:6px 8px;
+    font-size:11px;
+    line-height:1.2;
+  }
+  .date-controls input[type=date]{
+    min-inline-size:0;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .date-controls input[type=date]::-webkit-date-and-time-value{
+    min-width:0;
+    text-align:left;
+  }
+  .date-controls select{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .map-filter-box{
+    width:100%;
+    max-width:none;
+    min-width:0;
+    margin:10px 0 0;
+    padding:10px;
+  }
+  .map-mode-row,
+  .map-movement-row{
+    width:100%;
+    gap:6px;
+  }
+  .map-mode-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .map-movement-row{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .map-filter-btn{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    min-height:38px;
+    padding:7px 4px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .map-period-row{grid-template-columns:minmax(0,1fr) minmax(112px,.8fr)}
+  .map-period-row>*{min-width:0}
+}
+
+@media(max-width:390px){
+  .date-controls{gap:6px}
+  .date-controls input,.date-controls select{font-size:10px;padding-inline:6px}
+  .map-filter-box{padding:9px 8px}
+  .map-mode-row,.map-movement-row{gap:5px}
+  .map-filter-btn{font-size:9px;padding-inline:3px}
+}
+
+/* v3.8.2 · historial móvil esencial y gráfico temporal sin recorte */
 .history-chart-viewport .chart{
   height:auto;
   min-height:285px;
