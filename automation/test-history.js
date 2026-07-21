@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('assert');
-const {emptyHistory,upsertHistory,renderDataFromHistory}=require('./dmh-sync');
+const {emptyHistory,upsertHistory,renderDataFromHistory,paraguayToday,sourceRequestUrl}=require('./dmh-sync');
 
 const station=(nivel,fecha='2026-07-20')=>({nivel,variacion:0,fecha});
 const first={fecha:'2026-07-20',estaciones:{puerto_ladario:station(2.56,'2026-07-19'),caceres:station(1.33,'2026-07-19')}};
@@ -17,4 +17,6 @@ assert.strictEqual(upsertHistory(history,next).mode,'agregado');
 assert.strictEqual(history.boletines.length,2);
 const restored=renderDataFromHistory('/* DMH_AUTO_START\nconst DMH_AUTO_SEEDS = [];\n/* DMH_AUTO_END */',history);
 assert.match(restored,/2026-07-20/);assert.match(restored,/2026-07-21/);assert.match(restored,/puerto_ladario/);
-console.log(JSON.stringify({pruebas:8,boletines:history.boletines.length,restauracion:true},null,2));
+assert.strictEqual(paraguayToday(new Date('2026-07-21T12:00:00Z')),'2026-07-21');
+assert.match(sourceRequestUrl(2),/_observatorio=\d+-2$/);
+console.log(JSON.stringify({pruebas:10,boletines:history.boletines.length,restauracion:true,anticache:true},null,2));

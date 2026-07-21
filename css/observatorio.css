@@ -893,7 +893,7 @@
   input,select,textarea{font-size:16px}
 }
 
-/* v3.7.6 · historial móvil esencial y gráfico temporal sin recorte */
+/* v3.7.7 · historial móvil esencial y gráfico temporal sin recorte */
 .history-chart-viewport .chart{
   height:auto;
   min-height:285px;

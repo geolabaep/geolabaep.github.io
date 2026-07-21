@@ -13,6 +13,17 @@ const dataFile=path.resolve(process.cwd(),argument('data')||path.join(root,'data
 const historyFile=path.resolve(process.cwd(),argument('history')||path.join(root,'data','historico-dmh.json'));
 const indexFile=path.resolve(process.cwd(),argument('index')||path.join(root,'index.html'));
 const htmlFile=argument('html');
+const wait=milliseconds=>new Promise(resolve=>setTimeout(resolve,milliseconds));
+
+function paraguayToday(date=new Date()){
+  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Asuncion',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+  const value=Object.fromEntries(parts.map(part=>[part.type,part.value]));
+  return `${value.year}-${value.month}-${value.day}`;
+}
+function sourceRequestUrl(attempt=1){
+  const separator=SOURCE.includes('?')?'&':'?';
+  return `${SOURCE}${separator}_observatorio=${Date.now()}-${attempt}`;
+}
 
 function readDataContext(source){
   const sandbox={window:{},console};sandbox.window=sandbox;vm.createContext(sandbox);
@@ -70,17 +81,33 @@ function writeAtomic(filename,content){
   fs.mkdirSync(path.dirname(filename),{recursive:true});const temporary=`${filename}.tmp`;
   fs.writeFileSync(temporary,content);fs.renameSync(temporary,filename);
 }
-async function fetchHtml(){
+async function fetchHtml(attempt=1){
   if(htmlFile)return fs.readFileSync(path.resolve(process.cwd(),htmlFile),'utf8');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
   try{
-    const response=await fetch(SOURCE,{signal:controller.signal,headers:{'user-agent':'GEOlab-Observatorio-Hidrologico/3.7 (+https://geolabaep.github.io/)','accept':'text/html'}});
+    const response=await fetch(sourceRequestUrl(attempt),{signal:controller.signal,cache:'no-store',headers:{
+      'user-agent':'GEOlab-Observatorio-Hidrologico/3.7 (+https://geolabaep.github.io/)',
+      'accept':'text/html','cache-control':'no-cache, no-store, max-age=0','pragma':'no-cache'
+    }});
     if(!response.ok)throw new Error(`DMH respondió HTTP ${response.status}.`);return await response.text();
   }finally{clearTimeout(timer);}
 }
+async function fetchLatestParsed(){
+  if(htmlFile)return parseDmhHtml(await fetchHtml());
+  const expected=paraguayToday();let parsed=null;
+  for(let attempt=1;attempt<=3;attempt++){
+    parsed=parseDmhHtml(await fetchHtml(attempt));
+    if(parsed.latestDate>=expected)return parsed;
+    if(attempt<3){
+      console.warn(`[DMH] La fuente respondió con ${parsed.latestDate}; se esperaba ${expected}. Reintento ${attempt}/2 sin caché.`);
+      await wait(attempt*5000);
+    }
+  }
+  return parsed;
+}
 async function main(){
   if(!fs.existsSync(dataFile))throw new Error(`No existe el archivo de datos: ${dataFile}`);
-  const parsed=parseDmhHtml(await fetchHtml()),originalData=fs.readFileSync(dataFile,'utf8');
+  const parsed=await fetchLatestParsed(),originalData=fs.readFileSync(dataFile,'utf8');
   const history=readHistory(originalData),bulletin=bulletinFromParsed(parsed),result=upsertHistory(history,bulletin);
   const renderedData=renderDataFromHistory(originalData,history);
   const historyText=JSON.stringify(history,null,2)+'\n';
@@ -93,9 +120,13 @@ async function main(){
     const originalIndex=fs.readFileSync(indexFile,'utf8'),updatedIndex=updateIndexCacheKey(originalIndex,bulletin.fecha);
     indexChanged=updatedIndex!==originalIndex;if(indexChanged)writeAtomic(indexFile,updatedIndex);
   }
-  console.log(JSON.stringify({fuente:SOURCE,fecha:bulletin.fecha,estaciones:Object.keys(bulletin.estaciones).length,
+  const report={fuente:SOURCE,fecha:bulletin.fecha,fechaEsperada:paraguayToday(),estaciones:Object.keys(bulletin.estaciones).length,
     boletinesGuardados:history.boletines.length,operacion:result.mode,archivos:{historial:historyChanged,datos:dataChanged,index:indexChanged},
-    desconocidas:parsed.unknown,actualizado:historyChanged||dataChanged||indexChanged},null,2));
+    desconocidas:parsed.unknown,actualizado:historyChanged||dataChanged||indexChanged};
+  console.log(JSON.stringify(report,null,2));
+  if(process.env.GITHUB_STEP_SUMMARY){
+    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,`## Resultado de la consulta DMH\n\n- Fecha leída: **${report.fecha}**\n- Fecha esperada en Paraguay: **${report.fechaEsperada}**\n- Estaciones reconocidas: **${report.estaciones}**\n- Operación: **${report.operacion}**\n- Archivos modificados: **${report.actualizado?'sí':'no'}**\n`);
+  }
 }
 if(require.main===module)main().catch(error=>{console.error(`[DMH] ${error.message}`);process.exitCode=1;});
-module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,renderDataFromHistory,updateIndexCacheKey};
+module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,renderDataFromHistory,updateIndexCacheKey,paraguayToday,sourceRequestUrl};
