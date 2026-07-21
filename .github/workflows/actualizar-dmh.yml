@@ -2,6 +2,7 @@ name: Actualizar datos desde DMH
 
 on:
   schedule:
+    # GitHub usa UTC: cuatro comprobaciones diarias.
     - cron: '15 11,13,15,17 * * *'
   workflow_dispatch:
 
@@ -26,20 +27,24 @@ jobs:
       - name: Consultar, validar y actualizar
         run: node automation/dmh-sync.js
 
-      - name: Probar parser y sintaxis
+      - name: Probar datos y sintaxis
         run: |
           node automation/test-dmh.js
+          node automation/test-history.js
           node --check data/datos.js
+          node -e "const h=require('./data/historico-dmh.json'); if(!Array.isArray(h.boletines)) process.exit(1)"
           find js -name '*.js' -print0 | xargs -0 -n1 node --check
 
-      - name: Publicar solamente si existen cambios
+      - name: Guardar historial y actualizar visor
         run: |
-          if git diff --quiet -- data/datos.js; then
+          if git diff --quiet -- data/datos.js data/historico-dmh.json index.html; then
             echo "DMH todavía no publicó cambios."
             exit 0
           fi
+
           git config user.name "GEOlab Bot Hidrológico"
           git config user.email "geolab.aep@gmail.com"
-          git add data/datos.js
-          git commit -m "Datos DMH actualizados automáticamente"
+
+          git add data/datos.js data/historico-dmh.json index.html
+          git commit -m "Guardar boletín DMH y actualizar visor"
           git push
