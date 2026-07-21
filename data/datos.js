@@ -1740,6 +1740,167 @@ const DMH_AUTO_SEEDS = [
         fecha: "2026-07-20"
       }
     }
+  },
+  {
+    fecha: "2026-07-21",
+    estaciones: {
+      puerto_ladario: {
+        nivel: 2.54,
+        variacion: 0.01,
+        fecha: "2026-07-21"
+      },
+      puerto_murtinho: {
+        nivel: 3.26,
+        variacion: 0.01,
+        fecha: "2026-07-21"
+      },
+      caceres: {
+        nivel: 1.27,
+        variacion: -0.03,
+        fecha: "2026-07-21"
+      },
+      isla_margarita: {
+        nivel: 3.25,
+        variacion: -0.01,
+        fecha: "2026-07-21"
+      },
+      fuerte_olimpo: {
+        nivel: 4.16,
+        variacion: 0,
+        fecha: "2026-07-21"
+      },
+      bahia_negra: {
+        nivel: 4.16,
+        variacion: -0.02,
+        fecha: "2026-07-21"
+      },
+      vallemi: {
+        nivel: 3.07,
+        variacion: -0.01,
+        fecha: "2026-07-21"
+      },
+      concepcion: {
+        nivel: 2.34,
+        variacion: 0,
+        fecha: "2026-07-21"
+      },
+      rosario: {
+        nivel: 2,
+        variacion: 0,
+        fecha: "2026-07-21"
+      },
+      puerto_antequera: {
+        nivel: 2,
+        variacion: -0.05,
+        fecha: "2026-07-14"
+      },
+      villeta: {
+        nivel: 2.35,
+        variacion: -0.03,
+        fecha: "2026-07-21"
+      },
+      asuncion: {
+        nivel: 1.86,
+        variacion: -0.02,
+        fecha: "2026-07-21"
+      },
+      ita_enramada: {
+        nivel: 2.38,
+        variacion: -0.05,
+        fecha: "2026-07-21"
+      },
+      humaita: {
+        nivel: 3.32,
+        variacion: -0.06,
+        fecha: "2026-07-21"
+      },
+      alberdi: {
+        nivel: 4.14,
+        variacion: -0.09,
+        fecha: "2026-07-21"
+      },
+      pilar: {
+        nivel: 4.17,
+        variacion: -0.06,
+        fecha: "2026-07-21"
+      },
+      puerto_tigre: {
+        nivel: 6.71,
+        variacion: -0.07,
+        fecha: "2026-07-21"
+      },
+      salto_guaira: {
+        nivel: 6.69,
+        variacion: -0.03,
+        fecha: "2026-07-21"
+      },
+      cde: {
+        nivel: 10.81,
+        variacion: 0.55,
+        fecha: "2026-07-20"
+      },
+      cerrito: {
+        nivel: 1.52,
+        variacion: -0.21,
+        fecha: "2026-07-21"
+      },
+      ita_piru: {
+        nivel: 3.38,
+        variacion: -0.04,
+        fecha: "2026-07-21"
+      },
+      paso_patria: {
+        nivel: 4.03,
+        variacion: 0,
+        fecha: "2026-07-21"
+      },
+      ayolas: {
+        nivel: 1.9,
+        variacion: 0.2,
+        fecha: "2026-07-21"
+      },
+      panchito_lopez: {
+        nivel: 2.79,
+        variacion: -0.01,
+        fecha: "2026-07-21"
+      },
+      coratei: {
+        nivel: 1.7,
+        variacion: 0.3,
+        fecha: "2026-07-21"
+      },
+      ita_cora: {
+        nivel: 3.2,
+        variacion: -0.15,
+        fecha: "2026-07-21"
+      },
+      san_cosme: {
+        nivel: 9.85,
+        variacion: -0.03,
+        fecha: "2026-07-21"
+      },
+      encarnacion: {
+        nivel: 9.91,
+        variacion: -0.11,
+        fecha: "2026-07-21"
+      },
+      pozo_hondo: {
+        nivel: 3.05,
+        variacion: 0,
+        fecha: "2026-07-20"
+      },
+      villa_florida: {
+        nivel: 0.32,
+        variacion: 0.32,
+        fecha: "2025-02-28",
+        estado: "antiguo"
+      },
+      estacion_arirai: {
+        nivel: 4.84,
+        variacion: -0.01,
+        fecha: "2026-07-21"
+      }
+    }
   }
 ];
 /* DMH_AUTO_END */
