@@ -11727,19 +11727,19 @@ const DMH_AUTO_SEEDS = [
     fecha: "2026-09-22",
     estaciones: {
       puerto_ladario: {
-        nivel: 1.44,
-        variacion: -0.01,
-        fecha: "2026-09-20"
+        nivel: 1.4,
+        variacion: -0.04,
+        fecha: "2026-09-21"
       },
       puerto_murtinho: {
-        nivel: 2.48,
+        nivel: 2.46,
         variacion: -0.02,
-        fecha: "2026-09-20"
+        fecha: "2026-09-21"
       },
       caceres: {
-        nivel: 0.82,
-        variacion: -0.04,
-        fecha: "2026-09-20"
+        nivel: 0.81,
+        variacion: -0.01,
+        fecha: "2026-09-21"
       },
       isla_margarita: {
         nivel: 2.46,
@@ -11817,9 +11817,9 @@ const DMH_AUTO_SEEDS = [
         fecha: "2026-09-22"
       },
       cde: {
-        nivel: 18.79,
-        variacion: -0.14,
-        fecha: "2026-09-19"
+        nivel: 17.62,
+        variacion: -1.17,
+        fecha: "2026-09-21"
       },
       cerrito: {
         nivel: 3.6,
