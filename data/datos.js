@@ -12466,8 +12466,8 @@ const DMH_AUTO_SEEDS = [
         fecha: "2026-09-27"
       },
       cerrito: {
-        nivel: 3.75,
-        variacion: 0.52,
+        nivel: 3.2,
+        variacion: -0.03,
         fecha: "2026-09-27"
       },
       ita_piru: {

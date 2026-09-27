@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "fuente": "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php",
-  "actualizadoEn": "2026-09-27T15:38:27.619Z",
+  "actualizadoEn": "2026-09-27T20:07:53.450Z",
   "boletines": [
     {
       "fecha": "2026-07-20",
@@ -10889,8 +10889,8 @@
           "fecha": "2026-09-27"
         },
         "cerrito": {
-          "nivel": 3.75,
-          "variacion": 0.52,
+          "nivel": 3.2,
+          "variacion": -0.03,
           "fecha": "2026-09-27"
         },
         "ita_piru": {
