@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "fuente": "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php",
-  "actualizadoEn": "2026-09-30T16:48:28.840Z",
+  "actualizadoEn": "2026-10-01T17:21:15.333Z",
   "boletines": [
     {
       "fecha": "2026-07-20",
@@ -11431,6 +11431,167 @@
           "nivel": 3.5,
           "variacion": 0.01,
           "fecha": "2026-09-30"
+        }
+      }
+    },
+    {
+      "fecha": "2026-10-01",
+      "estaciones": {
+        "puerto_ladario": {
+          "nivel": 1.17,
+          "variacion": -0.01,
+          "fecha": "2026-09-30"
+        },
+        "puerto_murtinho": {
+          "nivel": 2.38,
+          "variacion": 0.05,
+          "fecha": "2026-09-30"
+        },
+        "caceres": {
+          "nivel": 0.75,
+          "variacion": -0.01,
+          "fecha": "2026-09-30"
+        },
+        "isla_margarita": {
+          "nivel": 2.38,
+          "variacion": 0.05,
+          "fecha": "2026-10-01"
+        },
+        "fuerte_olimpo": {
+          "nivel": 3,
+          "variacion": 0,
+          "fecha": "2026-10-01"
+        },
+        "bahia_negra": {
+          "nivel": 2.81,
+          "variacion": 0.01,
+          "fecha": "2026-09-30"
+        },
+        "vallemi": {
+          "nivel": 2.3,
+          "variacion": 0.05,
+          "fecha": "2026-10-01"
+        },
+        "concepcion": {
+          "nivel": 1.6,
+          "variacion": -0.02,
+          "fecha": "2026-10-01"
+        },
+        "rosario": {
+          "nivel": 1.19,
+          "variacion": 0.03,
+          "fecha": "2026-10-01"
+        },
+        "puerto_antequera": {
+          "nivel": 1.23,
+          "variacion": -0.03,
+          "fecha": "2026-10-01"
+        },
+        "villeta": {
+          "nivel": 0.89,
+          "variacion": 0.02,
+          "fecha": "2026-10-01"
+        },
+        "asuncion": {
+          "nivel": 0.5,
+          "variacion": 0.01,
+          "fecha": "2026-10-01"
+        },
+        "ita_enramada": {
+          "nivel": 0.98,
+          "variacion": 0.01,
+          "fecha": "2026-10-01"
+        },
+        "humaita": {
+          "nivel": 3.32,
+          "variacion": -0.03,
+          "fecha": "2026-10-01"
+        },
+        "alberdi": {
+          "nivel": 2.44,
+          "variacion": 0.01,
+          "fecha": "2026-10-01"
+        },
+        "pilar": {
+          "nivel": 3.2,
+          "variacion": -0.03,
+          "fecha": "2026-10-01"
+        },
+        "puerto_tigre": {
+          "nivel": 7.04,
+          "variacion": -0.11,
+          "fecha": "2026-10-01"
+        },
+        "salto_guaira": {
+          "nivel": 7.08,
+          "variacion": -0.02,
+          "fecha": "2026-10-01"
+        },
+        "cde": {
+          "nivel": 17.31,
+          "variacion": 0.69,
+          "fecha": "2026-09-30"
+        },
+        "cerrito": {
+          "nivel": 3,
+          "variacion": -0.16,
+          "fecha": "2026-10-01"
+        },
+        "ita_piru": {
+          "nivel": 5.55,
+          "variacion": -0.07,
+          "fecha": "2026-10-01"
+        },
+        "paso_patria": {
+          "nivel": 4.55,
+          "variacion": -0.03,
+          "fecha": "2026-10-01"
+        },
+        "ayolas": {
+          "nivel": 2.6,
+          "variacion": -0.1,
+          "fecha": "2026-10-01"
+        },
+        "panchito_lopez": {
+          "nivel": 3.65,
+          "variacion": -0.1,
+          "fecha": "2026-10-01"
+        },
+        "coratei": {
+          "nivel": 2.66,
+          "variacion": -0.05,
+          "fecha": "2026-10-01"
+        },
+        "ita_cora": {
+          "nivel": 4.8,
+          "variacion": 0.15,
+          "fecha": "2026-10-01"
+        },
+        "san_cosme": {
+          "nivel": 9.95,
+          "variacion": 0,
+          "fecha": "2026-10-01"
+        },
+        "encarnacion": {
+          "nivel": 10.12,
+          "variacion": -0.02,
+          "fecha": "2026-10-01"
+        },
+        "pozo_hondo": {
+          "nivel": 3.07,
+          "variacion": 0.08,
+          "fecha": "2026-10-01"
+        },
+        "villa_florida": {
+          "nivel": 0.32,
+          "variacion": 0.32,
+          "fecha": "2025-02-28",
+          "estado": "antiguo"
+        },
+        "estacion_arirai": {
+          "nivel": 3.46,
+          "variacion": -0.04,
+          "fecha": "2026-10-01"
         }
       }
     }
