@@ -1,5 +1,7 @@
 # GEOlab AEP · Observatorio Hidrológico
 
+**Acceder al observatorio:** [https://geolabaep.github.io/](https://geolabaep.github.io/)
+
 Versión de interfaz revisada el 22/10/2026, con datos DMH disponibles hasta esa fecha. Sitio estático: abrir `index.html` para revisar o publicar en GitHub Pages. No requiere instalación ni compilación.
 
 ## Organización
@@ -30,3 +32,7 @@ node automation/validate-repository.js
 ```
 
 Los mapas regionales y Leaflet están incluidos; los fondos alternativos y las tipografías web requieren conexión. Los datos no constituyen una alerta oficial.
+
+## Estadísticas de visitas
+
+Google Analytics 4 está integrado con el ID `G-PK379JHWXH`. Se activa al publicar en `geolabaep.github.io`. Las estadísticas se consultan en [Google Analytics](https://analytics.google.com/) con la cuenta autorizada, seleccionando el período diario, semanal o mensual. Las vistas previas locales no registran visitas.
