@@ -10,3 +10,4 @@ assert.strictEqual(parsed.observations.find(row=>row.id==='cde').fecha,'2026-07-
 assert.strictEqual(parsed.observations.find(row=>row.id==='asuncion').variacion,-0.02);
 assert.throws(()=>parseDmhHtml('<h1>ESTACIONES CONVENCIONALES</h1>'),/demasiado corta/);
 console.log(JSON.stringify({pruebas:5,estaciones:parsed.observations.length,fecha:parsed.latestDate},null,2));
+

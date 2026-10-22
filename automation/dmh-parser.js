@@ -55,3 +55,4 @@ function parseDmhHtml(html){
 }
 
 module.exports={STATION_ALIASES,normalize,isoDate,numeric,parseDmhHtml};
+

@@ -23,3 +23,12 @@ assert.strictEqual(validateHistory(history,{minimumBulletins:2,minimumStations:2
 assert.throws(()=>validateHistory({...history,boletines:[history.boletines[0]]},{minimumBulletins:2,minimumStations:2}),/reducir/);
 assert.throws(()=>upsertHistory(history,{fecha:'2026-07-21',estaciones:{puerto_ladario:station(2.50,'2026-07-21')}}),/bajaría/);
 console.log(JSON.stringify({pruebas:13,boletines:history.boletines.length,restauracion:true,anticache:true,proteccionHistorial:true},null,2));
+
+
+// El boletín automático conserva los extremos para actualizar las tarjetas.
+const {bulletinFromParsed}=require('./dmh-sync');
+const extrema={nivel:8.45,fecha:'2026-10-22'};
+const parsedBulletin=bulletinFromParsed({latestDate:'2026-10-22',observations:[{id:'ita_cora',nivel:8.45,variacion:0.03,fecha:'2026-10-22',maximo:extrema,minimo:{nivel:0.60,fecha:'2021-05-24'}}]});
+assert.deepStrictEqual(parsedBulletin.estaciones.ita_cora.maximo,extrema);
+assert.match(parsedBulletin.estaciones.ita_cora.source,/meteorologia.gov.py/);
+console.log('Extremos históricos y fuente conservados en boletines automáticos.');

@@ -1,3 +1,17 @@
+// Reduce only the drawing, preserving each bucket's first, last, minimum and maximum.
+function seriesDisplayRows(rows,budget=1000){
+ let segment=0;const indexed=rows.map((d,i)=>{if(i&&days(rows[i-1].fecha,d.fecha)!==1)segment++;return {...d,sourceIndex:i,segment};});
+ if(rows.length<=budget)return indexed;
+ const size=Math.ceil(rows.length/(budget/4)),result=[];
+ for(let start=0;start<indexed.length;start+=size){const bucket=indexed.slice(start,start+size);const lo=bucket.reduce((a,b)=>a.nivel<=b.nivel?a:b),hi=bucket.reduce((a,b)=>a.nivel>=b.nivel?a:b);const chosen=[...new Map([bucket[0],lo,hi,bucket.at(-1)].map(d=>[d.sourceIndex,d])).values()].sort((a,b)=>a.sourceIndex-b.sourceIndex);result.push(...chosen);}
+ return result;
+}
+function renderReadingTable(rows,page=0){
+ const size=200,pages=Math.max(1,Math.ceil(rows.length/size));page=Math.max(0,Math.min(pages-1,page));
+ const start=rows.length-page*size,end=Math.max(0,start-size);
+ qs('#history-reading-table').innerHTML=`<div class="table-page-controls"><button class="btn secondary" id="table-page-prev" ${page===0?'disabled':''}>Más recientes</button><span>Página ${page+1}/${pages} · ${rows.length} lecturas</span><button class="btn secondary" id="table-page-next" ${page===pages-1?'disabled':''}>Más antiguas</button></div><div class="history-table-scroll"><table class="table"><thead><tr><th>Fecha</th><th>Nivel</th><th>Cambio entre lecturas</th><th>Intervalo</th></tr></thead><tbody>${rows.slice(end,start).reverse().map((d,i)=>{const prev=rows[start-i-2];return `<tr><td>${fmtDate(d.fecha)}</td><td>${m(d.nivel)}</td><td>${prev?formatDelta(d.nivel-prev.nivel):'—'}</td><td>${prev?days(prev.fecha,d.fecha)+' día(s)':'—'}</td></tr>`}).join('')}</tbody></table></div>`;
+ qs('#table-page-prev').onclick=()=>renderReadingTable(rows,page-1);qs('#table-page-next').onclick=()=>renderReadingTable(rows,page+1);
+}
 /* Historial, estadísticas por estación y gráficos SVG. */
 function historyStats(rows, filtered, id){
  const clean=rows.filter(x=>x&&x.nivel!=null&&!Number.isNaN(Number(x.nivel)));
@@ -15,7 +29,7 @@ function historyStats(rows, filtered, id){
  const monthBack=latestRow?findLastOnOrBefore(clean,addDays(latestRow.fechaBoletin,-30),Math.max(0,clean.length-1)):null;
  return {clean,visible,latestRow,prevRow,maxRow,minRow,avg,pos,deltaPrev,weekBack,monthBack,range};
 }
-function addDays(iso,days){const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
+function addDays(iso,days){const d=new Date(iso+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10)}
 // Compatibilidad pública: todos los módulos delegan al núcleo compartido.
 function formatDelta(v,options={}){return FORMATTERS.delta(v,options)}
 function m(v){return FORMATTERS.level(v)}
@@ -39,7 +53,8 @@ function historyReading(st,stats){
  parts.push(`La estación ${st.nombre} registra ${m(stats.latestRow.nivel)} y se encuentra ${trend}.`);
  if(stats.avg!=null){parts.push(Number(stats.latestRow.nivel)>=stats.avg?`El nivel actual está por encima del promedio de la serie cargada (${m(stats.avg)}).`:`El nivel actual está por debajo del promedio de la serie cargada (${m(stats.avg)}).`)}
  const hp=historicoPct(st.id,stats.latestRow.nivel);
- if(hp!=null)parts.push(`Frente a los extremos históricos de referencia, se ubica aproximadamente en el ${Math.round(hp)}% del rango registrado.`);
+ if(recordExcess(st.id,stats.latestRow))parts.push('Supera el máximo histórico registrado; ver el aviso lila.');
+ else if(hp!=null)parts.push(`Frente a los extremos históricos de referencia, se ubica aproximadamente en el ${Math.round(hp)}% del rango registrado.`);
  return parts.join(' ');
 }
 function historyObservation(x,i,arr){
@@ -58,10 +73,10 @@ function historyObservation(x,i,arr){
 function stationContext(st,id,stats){
  const totalAll=historial(id).filter(x=>x&&x.nivel!=null).length;
  const coords=(st.lat&&st.lon)?`${Math.abs(st.lat).toFixed(4)}° ${st.lat<0?'S':'N'} · ${Math.abs(st.lon).toFixed(4)}° ${st.lon<0?'O':'E'}`:'—';
- const hist=HISTORICO[id]||{};
+ const hist=OFFICIAL_EXTREMES[id]||{};
  const period=stats.clean.length?`${fmtDate(stats.clean[0].fechaBoletin)} – ${fmtDate(stats.clean.at(-1).fechaBoletin)}`:'—';
  const country=st.nombre.includes('Brasil')?'Brasil':'Paraguay';
- return `<div class="history-meta-grid"><div><b>País</b><span>${country}</span></div><div><b>Coordenadas</b><span>${coords}</span></div><div><b>Período de registro cargado</b><span>${period}</span></div><div><b>Serie cargada</b><span>${totalAll} observaciones</span></div><div><b>Máx. de referencia</b><span>${hist.max?m(hist.max.nivel)+' · '+fmtDate(hist.max.fecha):'pendiente'}</span></div><div><b>Mín. de referencia</b><span>${hist.min?m(hist.min.nivel)+' · '+fmtDate(hist.min.fecha):'pendiente'}</span></div></div>`;
+ return `<div class="history-meta-grid"><div><b>País</b><span>${country}</span></div><div><b>Coordenadas</b><span>${coords}</span></div><div><b>Período de registro cargado</b><span>${period}</span></div><div><b>Serie cargada</b><span>${totalAll} observaciones</span></div><div><b>Máximo histórico</b><span>${hist.max?m(hist.max.nivel)+' · '+fmtDate(hist.max.fecha):'pendiente'}</span></div><div><b>Mínimo histórico</b><span>${hist.min?m(hist.min.nivel)+' · '+fmtDate(hist.min.fecha):'pendiente'}</span></div></div>`;
 }
 function stationPager(id){
  const idx=ESTACIONES_BASE.findIndex(s=>s.id===id);
@@ -70,7 +85,7 @@ function stationPager(id){
  return `<div class="history-pager"><button type="button" class="btn secondary" data-action="history-station" data-station-id="${prev.id}">◀ ${prev.nombre}</button><button type="button" class="btn secondary" data-action="history-station" data-station-id="${next.id}">${next.nombre} ▶</button></div>`;
 }
 /* Estado mínimo del visor histórico: solo conserva opciones que afectan el render. */
-const HISTORY_VIEW={period:'30',showHistoricalContext:false};
+const HISTORY_VIEW={period:'30',showHistoricalContext:true,detailScale:false};
 function historyPeriodStart(rows,period){
  if(!rows.length||period==='all'||period==='custom')return '';
  const days=Number(period);
@@ -78,92 +93,99 @@ function historyPeriodStart(rows,period){
  return addDays(rows.at(-1).fechaBoletin,-days+1);
 }
 function setHistoryPeriod(value){
- HISTORY_VIEW.period=value;
- const id=qs('#histStation')?.value||'asuncion';
- const rows=historial(id);
- if(value!=='custom'){
-  const start=historyPeriodStart(rows,value);
-  const end=rows.length?rows.at(-1).fechaBoletin:'';
-  const desde=qs('#histDesde'),hasta=qs('#histHasta');
-  if(desde)desde.value=start;
-  if(hasta)hasta.value=end;
- }
+ const id=qs('#histStation')?.value||'asuncion',rows=observedRows(id);
+ if(value.startsWith('year:')){const year=value.slice(5);HISTORY_VIEW.period='custom';HISTORY_VIEW.customStart=year+'-01-01';HISTORY_VIEW.customEnd=year+'-12-31';}
+ else {HISTORY_VIEW.period=value;if(value==='custom'){HISTORY_VIEW.customStart=HISTORY_VIEW.customStart||historyPeriodStart(rows,'30');HISTORY_VIEW.customEnd=HISTORY_VIEW.customEnd||rows.at(-1)?.fecha||'';}}
  renderHistory(id);
 }
+function applyHistoryDates(){
+ const start=qs('#histDesde')?.value,end=qs('#histHasta')?.value;
+ if(!start||!end||start>end){qs('#history-range-error').textContent='Elegí una fecha inicial anterior o igual a la final.';return;}
+ HISTORY_VIEW.period='custom';HISTORY_VIEW.customStart=start;HISTORY_VIEW.customEnd=end;renderHistory(qs('#histStation')?.value||'asuncion');
+}
 function setHistoryOption(key,value){HISTORY_VIEW[key]=value;renderHistory(qs('#histStation')?.value||'asuncion')}
-function historyPeriodLabel(v){return v==='all'?'Todo el historial':v==='7'?'Últimos 7 días':v==='30'?'Últimos 30 días':v==='90'?'Últimos 90 días':v==='365'?'Último año':'Rango personalizado'}
+function historyPeriodLabel(v){return v==='all'?'Todo el historial':v==='7'?'Últimos 7 días':v==='15'?'Últimos 15 días':v==='30'?'Últimos 30 días':v==='90'?'Últimos 90 días':v==='365'?'Último año':v==='1826'?'Últimos 5 años':'Rango personalizado'}
 function renderHistory(preselect){
  const defaultId='asuncion';
  const current=qs('#histStation')?.value;
  const id=preselect||current||defaultId;
- const rows=historial(id);
- let desdeVal=qs('#histDesde')?.value||'';
- let hastaVal=qs('#histHasta')?.value||'';
+ const rows=observedRows(id);
+ let desdeVal=HISTORY_VIEW.customStart||'';
+ let hastaVal=HISTORY_VIEW.customEnd||'';
  if(HISTORY_VIEW.period!=='custom'){
   desdeVal=historyPeriodStart(rows,HISTORY_VIEW.period);
   hastaVal=rows.length?rows.at(-1).fechaBoletin:'';
  }
- const opts=ESTACIONES_BASE.map(s=>`<option value="${s.id}" ${s.id===id?'selected':''}>${s.nombre} · ${s.rio}</option>`).join('');
+ const selectedRiver=STATION_BY_ID.get(id)?.rio;
+ const riverOptions=[...new Set(ESTACIONES_BASE.map(s=>s.rio))].map(r=>`<option ${r===selectedRiver?'selected':''}>${r}</option>`).join('');
+ const opts=ESTACIONES_BASE.filter(s=>s.rio===selectedRiver).map(s=>`<option value="${s.id}" ${s.id===id?'selected':''}>${s.nombre} · ${s.rio}</option>`).join('');
  const st=STATION_BY_ID.get(id)||STATION_BY_ID.get(defaultId)||ESTACIONES_BASE[0];
  const filtered=rows.filter(x=>(!desdeVal||x.fechaBoletin>=desdeVal)&&(!hastaVal||x.fechaBoletin<=hastaVal));
+ if(desdeVal&&hastaVal&&desdeVal>hastaVal){qs('#history-content').innerHTML='<div class="history-empty">La fecha Desde debe ser anterior o igual a Hasta. <button type="button" class="btn" data-action="history-station" data-station-id="'+id+'">Volver a la estación</button></div>';HISTORY_VIEW.period='30';return;}
  const stats=historyStats(rows,filtered,id);
- const latest=stats.latestRow;
+ const latest=filtered.at(-1)||null;
  const estado=latest?estadoEstacion(latest,latest.fechaBoletin):'sin';
  const weekDelta=stats.weekBack&&latest?Number(latest.nivel)-Number(stats.weekBack.nivel):null;
  const monthDelta=stats.monthBack&&latest?Number(latest.nivel)-Number(stats.monthBack.nivel):null;
  const periodAvg=filtered.length?filtered.reduce((a,x)=>a+Number(x.nivel),0)/filtered.length:null;
- let html=`<div class="history-intro"><div><h2 class="history-title">Análisis / Historial</h2><div class="history-subtitle">Exploración temporal por estación. La vista inicial presenta los últimos 30 días y permite ampliar el período cuando sea necesario.</div></div><div class="pill">Estación inicial: <strong>Asunción</strong></div></div>`;
- html+=`<div class="panel history-query-panel"><div class="history-toolbar"><div class="history-station-control"><label>Estación</label><select id="histStation" data-change="history-station">${opts}</select></div><div class="history-custom-control"><label>Desde</label><input type="date" id="histDesde" value="${desdeVal}" data-change="history-custom"></div><div class="history-custom-control"><label>Hasta</label><input type="date" id="histHasta" value="${hastaVal}" data-change="history-custom"></div><button type="button" class="btn history-custom-apply" data-action="history-custom-apply">Consultar</button></div></div>`;
- const href=historicoRef(id);const hpct=latest?historicoPct(id,latest.nivel):null;
- html+=`<div class="history-station-grid"><div class="history-profile"><div class="history-profile-river">${st.rio}</div><div class="history-profile-name">${st.nombre}</div><div class="history-profile-status"><span class="status ${clsEstado(estado)}">${latest?labelEstado(estado):'Sin dato'}</span><span class="small">Último registro: ${latest?fmtDate(latest.fechaBoletin):'—'}</span></div><div class="history-current">${latest?Number(latest.nivel).toFixed(2):'—'} <span>m</span></div><div class="history-profile-note">${historyReading(st,stats)}</div>${stationContext(st,id,stats)}${stationPager(id)}</div>`;
- html+=`<div class="history-kpi-grid"><div class="history-kpi"><div class="history-kpi-label">Variación reciente</div><div class="history-kpi-value ${trendClass(stats.deltaPrev||0)}">${stats.deltaPrev==null?'—':formatDelta(stats.deltaPrev,{absolute:true,icon:true})}</div><div class="history-kpi-detail">respecto al registro anterior</div></div><div class="history-kpi"><div class="history-kpi-label">Máximo histórico</div><div class="history-kpi-value">${href?.max?m(href.max.nivel):'—'}</div><div class="history-kpi-detail">${href?.max?fmtDate(href.max.fecha):'referencia pendiente'}</div></div><div class="history-kpi"><div class="history-kpi-label">Mínimo histórico</div><div class="history-kpi-value">${href?.min?m(href.min.nivel):'—'}</div><div class="history-kpi-detail">${href?.min?fmtDate(href.min.fecha):'referencia pendiente'}</div></div><div class="history-kpi"><div class="history-kpi-label">Promedio serie cargada</div><div class="history-kpi-value">${stats.avg!=null?m(stats.avg):'—'}</div><div class="history-kpi-detail">${stats.clean.length} registro(s)</div></div><div class="history-kpi"><div class="history-kpi-label">Variación semanal</div><div class="history-kpi-value ${trendClass(weekDelta||0)}">${weekDelta==null?'—':formatDelta(weekDelta,{absolute:true,icon:true})}</div><div class="history-kpi-detail">comparación aproximada 7 días</div></div><div class="history-kpi"><div class="history-kpi-label">Variación mensual</div><div class="history-kpi-value ${trendClass(monthDelta||0)}">${monthDelta==null?'—':formatDelta(monthDelta,{absolute:true,icon:true})}</div><div class="history-kpi-detail">comparación aproximada 30 días</div></div></div></div>`;
- html+=`<div class="history-analysis"><div class="history-analysis-card"><h3>Posición dentro del historial de referencia</h3><p>${latest&&hpct!=null?`El nivel actual se ubica en el ${Math.round(hpct)}% del rango entre el mínimo y máximo histórico de referencia.`:'Se necesitan extremos históricos de referencia para calcular esta posición.'}</p><div class="history-range-track"><div class="history-range-marker" style="left:${hpct==null?0:Math.round(hpct)}%"></div></div><div class="history-position-explain">0% representa el mínimo histórico de referencia y 100% el máximo histórico. Es un indicador de contexto, no un umbral oficial de alerta.</div></div><div class="history-analysis-card"><h3>Lectura para decisión</h3><p>${historyReading(st,stats)}</p></div></div>`;
- html+=`<div class="panel"><div class="history-chart-head"><div><div class="history-chart-title">Serie temporal de niveles</div><div class="small">Filtrá el período y las referencias visuales. El gráfico usa desplazamiento horizontal cuando la cantidad de observaciones supera el ancho disponible.</div></div><div class="small">${filtered.length} registro(s) visibles</div></div>`;
- html+=`<div class="history-chart-tools history-chart-tools-clean"><div><label>Período visible</label><select data-change="history-period"><option value="30" ${HISTORY_VIEW.period==='30'?'selected':''}>Últimos 30 días</option><option value="90" ${HISTORY_VIEW.period==='90'?'selected':''}>Últimos 90 días</option><option value="365" ${HISTORY_VIEW.period==='365'?'selected':''}>Último año</option><option value="all" ${HISTORY_VIEW.period==='all'?'selected':''}>Todo el historial</option><option value="custom" ${HISTORY_VIEW.period==='custom'?'selected':''}>Rango personalizado</option></select></div><div class="history-visible-range"><span>Desde <b>${filtered.length?fmtDate(filtered[0].fechaBoletin):'—'}</b></span><span>Hasta <b>${filtered.length?fmtDate(filtered.at(-1).fechaBoletin):'—'}</b></span></div><div class="history-chart-options"><label class="history-check history-context-toggle"><input type="checkbox" ${HISTORY_VIEW.showHistoricalContext?'checked':''} data-change="history-context"> Comparar con máximo y mínimo históricos</label></div><div class="history-period-note">La vista abre con los últimos 30 días y una escala ajustada a los niveles recientes. Activá el contexto histórico únicamente cuando necesites comparar la serie con los extremos de referencia.</div></div>`;
- const periodDelta=filtered.length>1?Number(filtered.at(-1).nivel)-Number(filtered[0].nivel):null;
- const periodText=filtered.length>1?`${periodDelta>0?'aumentó':periodDelta<0?'disminuyó':'se mantuvo sin cambio neto'} ${formatDelta(periodDelta,{absolute:true,icon:false})}`:'no posee registros suficientes para calcular una variación acumulada';
- const positionText=latest&&hpct!=null?`El último nivel se ubica en el ${Math.round(hpct)}% del rango histórico de referencia.`:'No se dispone de referencias suficientes para calcular la posición histórica.';
- html+=`<div class="history-period-summary"><span class="history-period-chip">Registros: <b>${filtered.length}</b></span><span class="history-period-chip">Primer dato: <b>${filtered.length?fmtDate(filtered[0].fechaBoletin):'—'}</b></span><span class="history-period-chip">Último dato: <b>${filtered.length?fmtDate(filtered.at(-1).fechaBoletin):'—'}</b></span><span class="history-period-chip">Variación acumulada: <b>${periodDelta==null?'—':formatDelta(periodDelta,{absolute:true,icon:true})}</b></span><span class="history-period-chip">Promedio: <b>${periodAvg==null?'—':m(periodAvg)}</b></span></div><div class="history-period-interpretation"><b>Lectura del período:</b> En ${historyPeriodLabel(HISTORY_VIEW.period).toLowerCase()}, el nivel ${periodText}. ${positionText}</div><div class="history-chart-viewport"><div class="chart" id="chart"></div></div><div class="chart-hint" id="chart-hint"></div>`;
- if(!filtered.length){html+=`<div class="history-empty" style="margin-top:12px">No hay registros para la estación y el rango seleccionado.</div>`}else{const firstLevel=Number(filtered[0].nivel);html+=`<div class="history-table-scroll"><table class="table"><thead><tr><th>Fecha consultada</th><th>Nivel</th><th>Variación</th><th>Variación acumulada</th><th>Posición histórica</th><th>Observación</th></tr></thead><tbody>`;filtered.slice().reverse().forEach(x=>{const originalIndex=filtered.findIndex(y=>y.fechaBoletin===x.fechaBoletin&&y.fecha===x.fecha);const accumulated=Number(x.nivel)-firstLevel;const pos=historicoPct(id,Number(x.nivel));html+=`<tr><td>${fmtDate(x.fechaBoletin)}</td><td class="mono">${x.nivel.toFixed(2)} m</td><td class="mono ${trendClass(x.variacion)}">${formatDelta(x.variacion,{absolute:true,icon:true})}</td><td class="mono ${trendClass(accumulated)}">${formatDelta(accumulated,{absolute:true,icon:true})}</td><td>${pos==null?'—':Math.round(pos)+'%'}</td><td>${x.observacion||historyObservation(x,originalIndex,filtered)}</td></tr>`});html+=`</tbody></table></div>`}
- html+=`</div>`;
+ let html=`<div class="control-heading"><div><span class="control-eyebrow">EXPLORACIÓN POR ESTACIÓN</span><h2>Análisis e historial</h2></div><span class="small">${st.rio}</span></div>
+ <div class="panel history-query-panel"><div class="history-controls-simple"><div><label for="histRiver">Río</label><select id="histRiver" data-change="history-river">${riverOptions}</select></div><div><label for="histStation">Estación</label><select id="histStation" data-change="history-station">${opts}</select></div><div><label for="history-period-select">Período</label><select id="history-period-select" data-change="history-period">${[['7','Últimos 7 días'],['15','Últimos 15 días'],['30','Últimos 30 días'],['90','Últimos 90 días'],['365','Último año'],['1826','Últimos 5 años'],['all','Todo el historial'],['custom','Personalizado']].map(([v,label])=>`<option value="${v}" ${HISTORY_VIEW.period===v?'selected':''}>${label}</option>`).join('')}<optgroup label="Consultar un año">${[...new Set(rows.map(d=>d.fecha.slice(0,4)))].reverse().map(year=>`<option value="year:${year}">${year}</option>`).join('')}</optgroup></select></div></div>${HISTORY_VIEW.period==='custom'?`<div class="history-custom-dates"><div><label for="histDesde">Desde</label><input type="date" id="histDesde" value="${desdeVal}" data-change="history-custom"></div><div><label for="histHasta">Hasta</label><input type="date" id="histHasta" value="${hastaVal}" data-change="history-custom"></div><span>El gráfico se actualiza al cambiar las fechas.</span></div><p id="history-range-error" role="status"></p>`:''}<p class="history-selected-range">Mostrando ${desdeVal?fmtDate(desdeVal):fmtDate(rows[0]?.fecha)} — ${hastaVal?fmtDate(hastaVal):'sin lecturas'}${HISTORY_VIEW.period!=='custom'?' · hasta la última lectura disponible':''}</p></div>
+ <div class="panel primary-series"><div class="history-chart-head"><div><h3>${st.nombre} · Niveles diarios</h3><span class="small">${latest?'Última lectura: '+fmtDate(latest.fecha)+' · '+m(latest.nivel):'Sin lecturas disponibles'}</span></div></div><div class="history-chart-viewport"><div class="chart" id="chart"></div></div><div class="chart-hint" id="chart-hint"></div></div>
+ ${dataQualityHtml(id)}
+ <details class="control-details"><summary>Ficha de estación y contexto histórico</summary><div class="detail-content">${stationContext(st,id,stats)}${stationPager(id)}</div></details>
+ <details class="control-details"><summary>Tabla de lecturas · ${filtered.length} registros</summary><div id="history-reading-table"></div></details>`;
  qs('#history-content').innerHTML=html;
- setTimeout(()=>drawChart(filtered,stats,id,HISTORY_VIEW),0)
+ renderReadingTable(filtered);
+
+ setTimeout(()=>drawChart(filtered,stats,id,{...HISTORY_VIEW,rangeStart:desdeVal||rows[0]?.fecha,rangeEnd:hastaVal||rows.at(-1)?.fecha}),0)
 }
 function drawChart(data,stats,id,view=HISTORY_VIEW){
- const el=qs('#chart');
- const hint=qs('#chart-hint');
- if(!el)return;
- if(hint)hint.innerHTML='';
- if(!data.length){el.innerHTML='<div class="small" style="padding:20px">Sin datos para graficar.</div>';return}
- const viewport=el.closest('.history-chart-viewport');
- const measuredW=(viewport?.clientWidth||el.clientWidth||360)-2;
- const containerW=Math.max(300,measuredW);
- const compact=containerW<560;
- const pointGap=data.length>180?32:data.length>90?38:data.length>45?46:(compact?52:68);
- const needsScroll=data.length>Math.max(8,Math.floor(containerW/pointGap));
- const w=needsScroll?Math.max(containerW+180,data.length*pointGap+90):containerW;
- const h=250,p=38;
- const vals=data.map(d=>Number(d.nivel));
- const href=historicoRef(id);
- const scaleVals=[...vals];
- if(view.showHistoricalContext&&href?.max&&Number.isFinite(Number(href.max.nivel)))scaleVals.push(Number(href.max.nivel));
- if(view.showHistoricalContext&&href?.min&&Number.isFinite(Number(href.min.nivel)))scaleVals.push(Number(href.min.nivel));
- const min=Math.min(...scaleVals),max=Math.max(...scaleVals),avg=vals.reduce((a,b)=>a+b,0)/vals.length,span=(max-min)||1;
- const pad=Math.max(span*0.08,0.05),scaleMin=min-pad,scaleMax=max+pad,scaleSpan=(scaleMax-scaleMin)||1;
- const y=v=>h-p-(v-scaleMin)/scaleSpan*(h-2*p);
- if(data.length===1){const pt=[containerW/2,h/2];el.innerHTML=`<svg width="100%" height="270" viewBox="0 0 ${containerW} 270"><text x="${p}" y="28" fill="#aebdc5" font-size="12">Registro puntual: no se genera línea temporal.</text><circle cx="${pt[0]}" cy="${pt[1]}" r="7" fill="#e8a33d"><title>${fmtDate(data[0].fechaBoletin)} · ${data[0].nivel.toFixed(2)} m</title></circle><text x="${pt[0]}" y="${pt[1]-14}" text-anchor="middle" fill="#f2efe9" font-size="13" font-weight="700">${data[0].nivel.toFixed(2)} m</text><text x="${pt[0]}" y="${pt[1]+26}" text-anchor="middle" fill="#aebdc5" font-size="11">${fmtDate(data[0].fechaBoletin)}</text></svg>`;return}
- const pts=data.map((d,i)=>[p+i*(w-2*p)/Math.max(1,data.length-1),y(Number(d.nivel))]);
- const path=pts.map((pt,i)=>(i?'L':'M')+pt[0]+','+pt[1]).join(' ');
- const refs=[];
- if(view.showHistoricalContext&&href?.max&&Number.isFinite(Number(href.max.nivel))){const v=Number(href.max.nivel);refs.push(`<line x1="${p}" x2="${w-p}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(230,93,79,.8)" stroke-width="2" stroke-dasharray="7 5" vector-effect="non-scaling-stroke"/><rect x="${p+4}" y="${Math.max(4,y(v)-22)}" width="168" height="18" rx="5" fill="rgba(8,29,44,.9)"/><text x="${p+12}" y="${Math.max(17,y(v)-9)}" fill="#f3b0a8" font-size="11" font-weight="700">Máx. histórico ${v.toFixed(2)} m</text>`)}
- if(view.showHistoricalContext&&href?.min&&Number.isFinite(Number(href.min.nivel))){const v=Number(href.min.nivel);const labelY=Math.min(h-4,y(v)+7);refs.push(`<line x1="${p}" x2="${w-p}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(79,179,169,.85)" stroke-width="2" stroke-dasharray="7 5" vector-effect="non-scaling-stroke"/><rect x="${p+4}" y="${Math.min(h-22,Math.max(4,labelY-14))}" width="166" height="18" rx="5" fill="rgba(8,29,44,.9)"/><text x="${p+12}" y="${Math.min(h-8,Math.max(17,labelY-1))}" fill="#8ad8cf" font-size="11" font-weight="700">Mín. histórico ${v.toFixed(2)} m</text>`)}
- const htxt=id?historicoTextoCorto(id,data.at(-1)?.nivel):'';
- const step=Math.max(1,Math.ceil(data.length/16));
- const xLabels=data.map((d,i)=>i%step===0||i===data.length-1?`<text x="${pts[i][0]}" y="266" text-anchor="middle" fill="#aebdc5" font-size="10" transform="rotate(-35 ${pts[i][0]} 266)">${fmtDate(d.fechaBoletin).slice(0,5)}</text>`:'').join('');
- const circles=pts.map((pt,i)=>`<circle cx="${pt[0]}" cy="${pt[1]}" r="4" fill="#e8a33d"><title>${fmtDate(data[i].fechaBoletin)} · ${data[i].nivel.toFixed(2)} m</title></circle>`).join('');
- const svg=`<svg class="chart-canvas" width="${w}" height="285" viewBox="0 0 ${w} 285" preserveAspectRatio="xMinYMin meet" role="img" aria-label="Serie temporal de ${STATION_BY_ID.get(id)?.nombre||'la estación'}">${refs.join('')}<text x="${w-p}" y="24" text-anchor="end" fill="#aebdc5" font-size="10">${htxt}</text><path d="${path}" fill="none" stroke="#4fb3a9" stroke-width="3" vector-effect="non-scaling-stroke"/><g>${circles}</g>${xLabels}</svg>`;
- el.innerHTML=`<div class="chart-scroll" id="chart-scroll" style="width:${w}px">${svg}</div>`;
- const sc=viewport;
- if(sc&&needsScroll){requestAnimationFrame(()=>{sc.scrollLeft=sc.scrollWidth-sc.clientWidth});let down=false,startX=0,startLeft=0;sc.style.cursor='grab';sc.onmousedown=e=>{down=true;startX=e.pageX;startLeft=sc.scrollLeft;sc.style.cursor='grabbing'};window.addEventListener('mouseup',()=>{down=false;if(sc)sc.style.cursor='grab'},{once:false});sc.onmousemove=e=>{if(!down)return;e.preventDefault();sc.scrollLeft=startLeft-(e.pageX-startX)}}
- if(hint)hint.innerHTML=needsScroll?`<span><strong>Desplazamiento activo:</strong> usá la barra inferior o arrastrá horizontalmente para recorrer la serie.</span><span>La tabla inferior posee scroll vertical independiente.</span>`:`<span>La serie visible cabe completa en el visor. La tabla inferior posee scroll vertical independiente.</span>`;
+ const el=qs('#chart'),hint=qs('#chart-hint');if(!el)return;
+ const rows=data.filter(validReading),firstBound=view.rangeStart||rows[0]?.fecha,lastBound=view.rangeEnd||rows.at(-1)?.fecha;
+ if(!rows.length){el.innerHTML='<div class="history-empty">No hay lecturas en el rango seleccionado. Probá ampliar las fechas.</div>';if(hint)hint.textContent='No se completan fechas con valores estimados.';return;}
+ const first=firstBound||rows[0].fecha,last=lastBound||rows.at(-1).fecha,span=Math.max(1,days(first,last));
+ const w=1000,h=390,left=70,right=28,top=38,bottom=48;
+ const official=OFFICIAL_EXTREMES[id],ref=HISTORICO[id],analysis=stationAnalysis(id,rows.at(-1).fecha);
+ const high=rows.reduce((a,b)=>a.nivel>=b.nivel?a:b),low=rows.reduce((a,b)=>a.nivel<=b.nivel?a:b);
+ const maxEvents=new Set(recordEvents(id,last).map(d=>d.fecha)),minEvents=new Set(minimumRecordEvents(id,last).map(d=>d.fecha));
+ const newMax=analysis.events.at(-1),newMin=minimumRecordEvents(id,last).at(-1);
+ const refs=[];if(view.showHistoricalContext){
+ const add=(d,label,color)=>{if(d)refs.push({v:d.nivel,label,color,fecha:d.fecha});};
+ add(newMin?ref?.min:official?.min,newMin?'Mínimo histórico anterior':'Mínimo histórico DMH','#a5b8c7');
+ if(newMin)add(newMin,'Nuevo mínimo histórico','#efa0c6');
+ add(newMax?ref?.max:official?.max,newMax?'Máximo histórico anterior':'Máximo histórico DMH','#e3bd70');
+ if(newMax)add(newMax,'Nuevo máximo histórico','#d8b4fe');
+ }
+ const values=rows.map(d=>d.nivel),scale=values.concat(view.detailScale?[]:refs.map(r=>r.v));
+ const pad=Math.max(.1,(Math.max(...scale)-Math.min(...scale))*.15),min=Math.min(...scale)-pad,max=Math.max(...scale)+pad;
+ const x=d=>first===last?(left+w-right)/2:left+days(first,d.fecha)/span*(w-left-right),y=n=>h-bottom-(n-min)/(max-min)*(h-top-bottom);
+ const points=rows.map(d=>({x:x(d),y:y(d.nivel)}));
+ const displayRows=seriesDisplayRows(rows),displayPoints=displayRows.map(d=>({...d,x:x(d),y:y(d.nivel)}));
+ const path=displayPoints.map((p,i)=>`${i&&displayPoints[i-1].segment===p.segment?'L':'M'}${p.x},${p.y}`).join(' ');
+ const ticks=Array.from({length:6},(_,i)=>{const n=min+(max-min)*i/5;return `<line x1="${left}" x2="${w-right}" y1="${y(n)}" y2="${y(n)}" stroke="#ffffff16"/><text x="${left-10}" y="${y(n)+4}" text-anchor="end" fill="#b8c8d5" font-size="10">${n.toFixed(2)}</text>`}).join('');
+ const tickDates=first===last?[first]:[...new Set(Array.from({length:Math.min(6,span+1)},(_,i)=>addDays(first,Math.round(i*span/Math.max(1,Math.min(6,span+1)-1)))))];
+ const labels=tickDates.map(fecha=>`<text x="${x({fecha})}" y="${h-18}" text-anchor="middle" fill="#b8c8d5" font-size="10">${span>365?fmtDate(fecha).slice(3):fmtDate(fecha).slice(0,5)}</text>`).join('');
+ const seen=new Set(rows.map(d=>d.fecha)),missingDates=[];for(let date=first;date<=last;date=addDays(date,1))if(!seen.has(date))missingDates.push(date);
+ const gaps=[];for(const date of missingDates){const previous=gaps.at(-1);if(previous&&days(previous.end,date)===1)previous.end=date;else gaps.push({start:date,end:date});}
+ const dayWidth=(w-left-right)/span;
+ const shades=gaps.map(g=>{const start=Math.max(left,x({fecha:g.start})-dayWidth/2),end=Math.min(w-right,x({fecha:g.end})+dayWidth/2);return `<rect x="${start}" y="${top}" width="${Math.max(1,end-start)}" height="${h-top-bottom}" fill="url(#gap-hatch)"><title>Sin lectura: ${fmtDate(g.start)}${g.end!==g.start?' — '+fmtDate(g.end):''}</title></rect>`}).join('');
+ const marks=displayRows.map((d)=>{const kind=maxEvents.has(d.fecha)?'max':minEvents.has(d.fecha)?'min':null;return `<circle cx="${x(d)}" cy="${y(d.nivel)}" r="${kind?5:2.5}" fill="${kind==='max'?'#d8b4fe':kind==='min'?'#efa0c6':'#6ed5ce'}"></circle>`}).join('');
+ let lastLabelY=top-18;const refLines=refs.filter(r=>r.v>=min&&r.v<=max).sort((a,b)=>b.v-a.v).map(r=>({...r,labelY:(lastLabelY=Math.max(y(r.v)-8,lastLabelY+16))})).map(r=>`<line x1="${left}" x2="${w-right}" y1="${y(r.v)}" y2="${y(r.v)}" stroke="${r.color}" stroke-dasharray="7 5"/><text x="${left+8}" y="${r.labelY}" fill="${r.color}" font-size="10">${r.label} · ${m(r.v)}</text>`).join('');
+ const total=days(first,last)+1,coverage=Math.round(100*rows.length/total),closing=rows.at(-1),opening=rows[0];
+ const extCard=(kind)=>{const newRecord=kind==='max'?newMax:newMin,r=newRecord||official?.[kind],previous=ref?.[kind];if(!r)return '';const type=kind==='max'?'Máximo':'Mínimo';return `<div class="history-extreme ${newRecord?'new-'+kind:'known-'+kind}"><h4>${type} histórico</h4>${newRecord?`<div class="extreme-comparison"><div><span>Anterior</span><b class="previous-extreme">${m(previous.nivel)}</b><small>${fmtDate(previous.fecha)}</small></div><div><span>Nuevo ${type.toLowerCase()}</span><strong>${m(r.nivel)}</strong><small>${fmtDate(r.fecha)}</small></div></div><p>${m(newRecord.excess/100)} ${kind==='max'?'por encima':'por debajo'} del anterior</p>`:`<strong>${m(r.nivel)}</strong><small>${fmtDate(r.fecha)}${r.fecha>last?' · posterior al período':''}</small><p>Publicado por DMH</p>`}</div>`;};
+ const metric=(label,value,note)=>`<div><span>${label}</span><b>${value}</b><small>${note}</small></div>`;
+ const periodRecords=rows.filter(d=>maxEvents.has(d.fecha)||minEvents.has(d.fecha));
+ el.innerHTML=`<div class="series-context-band">${extCard('min')}<div class="history-extreme last"><span>Último nivel del período</span><strong>${m(closing.nivel)}</strong><small>${fmtDate(closing.fecha)}${closing.fecha<last?' · faltan lecturas hasta el cierre':''}</small></div>${extCard('max')}</div><details class="series-display-options"><summary>Opciones del gráfico · ${view.detailScale?'detalle de variaciones':'contexto histórico'}</summary><div class="series-scale-row"><label for="series-detail-scale">Escala vertical<select id="series-detail-scale"><option value="full" ${!view.detailScale?'selected':''}>Contexto histórico · ver extremos</option><option value="detail" ${view.detailScale?'selected':''}>Detalle · ver cambios pequeños</option></select></label><span><b>${m(min)} a ${m(max)}</b><br>${view.detailScale?'Se amplía el eje vertical; no cambian los datos ni las fechas. Los extremos fuera de escala siguen arriba.':'Incluye los extremos históricos. Las variaciones pequeñas pueden verse comprimidas.'}</span></div></details>${displayRows.length<rows.length?`<p class="series-resolution">Vista resumida: ${rows.length.toLocaleString('es-PY')} lecturas diarias. Se conservan máximos y mínimos de cada bloque; el cursor y el CSV mantienen todos los datos. Elegí un año o un rango menor para ver más detalle.</p>`:''}<div class="series-plot"><svg viewBox="0 0 ${w} ${h}" class="decision-chart" tabindex="0" role="img" aria-label="Serie de niveles de ${STATION_BY_ID.get(id)?.nombre}. ${missingDates.length} días sin lectura."><defs><pattern id="gap-hatch" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0,8 L8,0" stroke="#b2bbc028" stroke-width="2"/></pattern></defs><text x="10" y="20" fill="#b8c8d5" font-size="10">Nivel (m)</text>${shades}${ticks}${refLines}<path d="${path}" fill="none" stroke="#6ed5ce" stroke-width="3" stroke-linejoin="round"/>${marks}${labels}<line id="series-cursor" x1="0" x2="0" y1="${top}" y2="${h-bottom}" stroke="#f2efe9" stroke-dasharray="3 4"/><circle id="series-point" r="6" fill="#fff" stroke="#15384b" stroke-width="3"/><g id="series-tooltip" visibility="hidden" pointer-events="none"><rect width="270" height="76" rx="8" fill="#f7fafc" stroke="#bdccd6"/><text id="series-tooltip-text" x="12" y="20" fill="#193a4c" font-size="10"></text></g></svg><button type="button" id="series-tooltip-close" class="series-tooltip-close" hidden>Cerrar detalle ×</button></div><p class="series-click-help">Hacé clic en el gráfico para consultar una lectura. Cerrá el detalle con × o Escape.</p><div class="sr-only" id="series-inspector" aria-live="polite"></div><div class="series-scrubber"><label for="series-slider">Explorar fecha y nivel</label><input id="series-slider" type="range" min="0" max="${rows.length-1}" value="${rows.length-1}" step="1" aria-label="Lectura de la serie"><button type="button" class="btn secondary" id="series-export">Descargar CSV</button></div><div class="series-reading"><b>Qué muestra el período</b><p>${evolutionSummary(analysis)}</p></div>${changesHtml(analysis)}<div class="decision-strip period-metrics">${metric('Máximo del período',m(high.nivel),fmtDate(high.fecha))}${metric('Mínimo del período',m(low.nivel),fmtDate(low.fecha))}${metric('Cambio neto',formatDelta(closing.nivel-opening.nivel),fmtDate(opening.fecha)+' → '+fmtDate(closing.fecha))}${metric('Cobertura del rango',coverage+'%',rows.length+'/'+total+' días · '+missingDates.length+' sin lectura')}</div>${gaps.length?`<details class="control-details"><summary>Ver ${gaps.length} intervalo(s) sin datos</summary><p>${gaps.map(g=>fmtDate(g.start)+(g.start===g.end?'':' — '+fmtDate(g.end))).join(' · ')}</p></details>`:''}${periodRecords.length?`<details class="control-details"><summary>Récords históricos en el período · ${periodRecords.length} registros</summary><div class="series-events">${periodRecords.map(d=>`<div class="extreme-${maxEvents.has(d.fecha)?'max':'min'}"><b>${maxEvents.has(d.fecha)?'◆ Nuevo máximo':'◇ Nuevo mínimo'}</b><span>${m(d.nivel)} · ${fmtDate(d.fecha)}</span></div>`).join('')}</div><p>Comparados con los extremos históricos anteriores conservados en la base y las lecturas previas disponibles.</p></details>`:''}<details class="control-details"><summary>Posición en el rango histórico anterior</summary>${positionHtml(analysis)}</details>`;
+ const select=(i,reveal=false)=>{const d=rows[i],p=points[i],all=analysis.rows,index=all.findIndex(r=>r.fecha===d.fecha),prev=all[index-1],interval=prev?days(prev.fecha,d.fecha):0;qs('#series-inspector').textContent=`${fmtDate(d.fecha)} · ${m(d.nivel)}${prev?' · '+formatDelta(d.nivel-prev.nivel)+(interval===1?' en 24 h':' desde la lectura de hace '+interval+' días'):''}${maxEvents.has(d.fecha)?' · ◆ Nuevo máximo histórico':minEvents.has(d.fecha)?' · ◇ Nuevo mínimo histórico':''}`;qs('#series-cursor').setAttribute('x1',p.x);qs('#series-cursor').setAttribute('x2',p.x);qs('#series-point').setAttribute('cx',p.x);qs('#series-point').setAttribute('cy',p.y);qs('#series-slider').value=i;qs('#series-slider').setAttribute('aria-valuetext',fmtDate(d.fecha)+': '+m(d.nivel));const tip=qs('#series-tooltip');tip.setAttribute('visibility',reveal?'visible':'hidden');qs('#series-tooltip-close').hidden=!reveal;qs('#series-cursor').setAttribute('visibility',reveal?'visible':'hidden');qs('#series-point').setAttribute('visibility',reveal?'visible':'hidden');tip.setAttribute('transform',`translate(${Math.max(left,Math.min(w-right-270,p.x+14))},${Math.max(top,Math.min(h-bottom-76,p.y-86))})`);qs('#series-tooltip-text').innerHTML=`<tspan x="12" dy="0" font-weight="700">${fmtDate(d.fecha)} · ${m(d.nivel)}</tspan><tspan x="12" dy="18">${prev?formatDelta(d.nivel-prev.nivel)+' en '+interval+' día(s)':'Sin lectura anterior disponible'}</tspan><tspan x="12" dy="18" fill="${maxEvents.has(d.fecha)?'#8150ae':minEvents.has(d.fecha)?'#a84070':'#526c7b'}">${maxEvents.has(d.fecha)?'◆ Nuevo máximo histórico':minEvents.has(d.fecha)?'◇ Nuevo mínimo histórico':'Lectura diaria observada'}</tspan>`;};
+ qs('#series-slider').oninput=e=>select(Number(e.target.value));
+ qs('#series-detail-scale').onchange=e=>{HISTORY_VIEW.detailScale=e.target.value==='detail';drawChart(data,stats,id,{...view,detailScale:HISTORY_VIEW.detailScale});};
+ const inspect=e=>{const box=e.currentTarget.getBoundingClientRect(),pos=(e.clientX-box.left)/box.width*w;let lo=0,hi=points.length-1;while(lo<hi){const mid=Math.floor((lo+hi)/2);if(points[mid].x<pos)lo=mid+1;else hi=mid;}let nearest=lo;if(lo&&Math.abs(points[lo-1].x-pos)<Math.abs(points[lo].x-pos))nearest=lo-1;select(nearest,true);};
+ qs('.decision-chart').onpointermove=null;qs('.decision-chart').onclick=inspect;
+ const hideDetail=()=>{qs('#series-tooltip').setAttribute('visibility','hidden');qs('#series-cursor').setAttribute('visibility','hidden');qs('#series-point').setAttribute('visibility','hidden');qs('#series-tooltip-close').hidden=true;};
+ qs('#series-tooltip-close').onclick=hideDetail;qs('.decision-chart').onkeydown=e=>{if(e.key==='Escape')hideDetail();if(e.key==='Enter')select(Number(qs('#series-slider').value),true);};
+ qs('#series-export').onclick=()=>{const csv='fecha,nivel_m,tipo_record,fuente\n'+rows.map(d=>`${d.fecha},${d.nivel.toFixed(2)},${maxEvents.has(d.fecha)?'maximo':minEvents.has(d.fecha)?'minimo':''},${d.source||''}`).join('\n');const url=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`${id}_${first}_${last}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+ select(rows.length-1);
+ if(hint)hint.innerHTML='<span>● Nivel observado · <b class="extreme-max">◆ Nuevo máximo</b> · <b class="extreme-min">◇ Nuevo mínimo</b> · Franja rayada: sin lectura.</span><span>Dorado: máximo anterior o máximo DMH sin nuevo récord. Lila: nuevo máximo. Extremos DMH consultados el '+fmtDate(DMH_EXTREMES_DATE)+'; pueden ser posteriores al rango elegido. No son umbrales de alerta. No se interpolan datos.</span>';
 }
+
+function dataQualityHtml(id){const a=DMH_AUDIT.stations.find(s=>s.id===id);if(!a)return '';return `<details class="control-details"><summary>Calidad de la serie · ${a.added} lecturas recuperadas${a.conflicts?' · '+a.conflicts+' valores corregidos con DMH':''}</summary><div class="quality-note">Se consultó el historial de la DMH el ${fmtDate(DMH_AUDIT.retrieved)} y se completaron únicamente fechas ausentes, hasta el ${fmtDate(DMH_AUDIT.through)}. No se interpolaron valores. Quedan ${a.remaining.length} fechas sin lectura verificada. ${a.errors.length?'La consulta tuvo limitaciones de acceso.':''}${DMH_AUDIT.conflicts.filter(c=>c.id===id).map(c=>`<p>${fmtDate(c.fecha)}: base original ${m(c.original)} · DMH ${m(c.nivel)}. <a href="${c.source}" target="_blank" rel="noopener">Ver fuente ↗</a></p>`).join('')}<p>Los valores discrepantes se corrigieron con la tabla de la DMH. Se conserva aquí el valor original para trazabilidad. Esta verificación comprueba concordancia con lo publicado, no certifica la medición del instrumento.</p></div></details>`;}

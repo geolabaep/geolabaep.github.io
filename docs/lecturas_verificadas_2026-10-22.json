@@ -1,0 +1,500 @@
+[
+  {
+    "id": "puerto_ladario",
+    "fecha": "2026-10-20",
+    "nivel": 1.27,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082001&page=1"
+  },
+  {
+    "id": "puerto_murtinho",
+    "fecha": "2026-10-20",
+    "nivel": 3.16,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082002&page=1"
+  },
+  {
+    "id": "caceres",
+    "fecha": "2026-10-20",
+    "nivel": 1.2,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082003&page=1"
+  },
+  {
+    "id": "isla_margarita",
+    "fecha": "2026-10-22",
+    "nivel": 3.2,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086009&page=1"
+  },
+  {
+    "id": "isla_margarita",
+    "fecha": "2026-10-21",
+    "nivel": 3.16,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086009&page=1"
+  },
+  {
+    "id": "isla_margarita",
+    "fecha": "2026-10-20",
+    "nivel": 3.08,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086009&page=1"
+  },
+  {
+    "id": "fuerte_olimpo",
+    "fecha": "2026-10-22",
+    "nivel": 3.54,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086010&page=1"
+  },
+  {
+    "id": "fuerte_olimpo",
+    "fecha": "2026-10-21",
+    "nivel": 3.54,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086010&page=1"
+  },
+  {
+    "id": "fuerte_olimpo",
+    "fecha": "2026-10-20",
+    "nivel": 3.5,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086010&page=1"
+  },
+  {
+    "id": "bahia_negra",
+    "fecha": "2026-10-22",
+    "nivel": 3.06,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086033&page=1"
+  },
+  {
+    "id": "bahia_negra",
+    "fecha": "2026-10-21",
+    "nivel": 3.04,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086033&page=1"
+  },
+  {
+    "id": "bahia_negra",
+    "fecha": "2026-10-20",
+    "nivel": 3.03,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086033&page=1"
+  },
+  {
+    "id": "vallemi",
+    "fecha": "2026-10-22",
+    "nivel": 3.24,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086088&page=1"
+  },
+  {
+    "id": "vallemi",
+    "fecha": "2026-10-21",
+    "nivel": 3.35,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086088&page=1"
+  },
+  {
+    "id": "vallemi",
+    "fecha": "2026-10-20",
+    "nivel": 3.32,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086088&page=1"
+  },
+  {
+    "id": "concepcion",
+    "fecha": "2026-10-22",
+    "nivel": 2.89,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086134&page=1"
+  },
+  {
+    "id": "concepcion",
+    "fecha": "2026-10-21",
+    "nivel": 2.89,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086134&page=1"
+  },
+  {
+    "id": "concepcion",
+    "fecha": "2026-10-20",
+    "nivel": 2.86,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086134&page=1"
+  },
+  {
+    "id": "rosario",
+    "fecha": "2026-10-22",
+    "nivel": 3.17,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086183&page=1"
+  },
+  {
+    "id": "rosario",
+    "fecha": "2026-10-21",
+    "nivel": 3.13,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086183&page=1"
+  },
+  {
+    "id": "rosario",
+    "fecha": "2026-10-20",
+    "nivel": 3.13,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086183&page=1"
+  },
+  {
+    "id": "puerto_antequera",
+    "fecha": "2026-10-22",
+    "nivel": 2.95,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086184&page=1"
+  },
+  {
+    "id": "puerto_antequera",
+    "fecha": "2026-10-21",
+    "nivel": 2.92,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086184&page=1"
+  },
+  {
+    "id": "puerto_antequera",
+    "fecha": "2026-10-20",
+    "nivel": 2.88,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086184&page=1"
+  },
+  {
+    "id": "villeta",
+    "fecha": "2026-10-22",
+    "nivel": 3.3,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086211&page=1"
+  },
+  {
+    "id": "villeta",
+    "fecha": "2026-10-21",
+    "nivel": 3.24,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086211&page=1"
+  },
+  {
+    "id": "villeta",
+    "fecha": "2026-10-20",
+    "nivel": 3.19,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086211&page=1"
+  },
+  {
+    "id": "asuncion",
+    "fecha": "2026-10-22",
+    "nivel": 2.83,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086218&page=1"
+  },
+  {
+    "id": "asuncion",
+    "fecha": "2026-10-21",
+    "nivel": 2.81,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086218&page=1"
+  },
+  {
+    "id": "asuncion",
+    "fecha": "2026-10-20",
+    "nivel": 2.77,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086218&page=1"
+  },
+  {
+    "id": "ita_enramada",
+    "fecha": "2026-10-22",
+    "nivel": 3.31,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086219&page=1"
+  },
+  {
+    "id": "ita_enramada",
+    "fecha": "2026-10-21",
+    "nivel": 3.27,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086219&page=1"
+  },
+  {
+    "id": "ita_enramada",
+    "fecha": "2026-10-20",
+    "nivel": 3.22,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086219&page=1"
+  },
+  {
+    "id": "humaita",
+    "fecha": "2026-10-22",
+    "nivel": 6.45,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086252&page=1"
+  },
+  {
+    "id": "humaita",
+    "fecha": "2026-10-21",
+    "nivel": 6.34,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086252&page=1"
+  },
+  {
+    "id": "humaita",
+    "fecha": "2026-10-20",
+    "nivel": 6.0,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086252&page=1"
+  },
+  {
+    "id": "alberdi",
+    "fecha": "2026-10-22",
+    "nivel": 5.16,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086254&page=1"
+  },
+  {
+    "id": "alberdi",
+    "fecha": "2026-10-21",
+    "nivel": 5.04,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086254&page=1"
+  },
+  {
+    "id": "alberdi",
+    "fecha": "2026-10-20",
+    "nivel": 4.93,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086254&page=1"
+  },
+  {
+    "id": "pilar",
+    "fecha": "2026-10-22",
+    "nivel": 6.1,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086255&page=1"
+  },
+  {
+    "id": "pilar",
+    "fecha": "2026-10-21",
+    "nivel": 5.99,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086255&page=1"
+  },
+  {
+    "id": "pilar",
+    "fecha": "2026-10-20",
+    "nivel": 5.84,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086255&page=1"
+  },
+  {
+    "id": "puerto_tigre",
+    "fecha": "2026-10-22",
+    "nivel": 6.33,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086209&page=1"
+  },
+  {
+    "id": "puerto_tigre",
+    "fecha": "2026-10-21",
+    "nivel": 6.46,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086209&page=1"
+  },
+  {
+    "id": "puerto_tigre",
+    "fecha": "2026-10-20",
+    "nivel": 6.53,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086209&page=1"
+  },
+  {
+    "id": "salto_guaira",
+    "fecha": "2026-10-22",
+    "nivel": 6.76,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086210&page=1"
+  },
+  {
+    "id": "salto_guaira",
+    "fecha": "2026-10-21",
+    "nivel": 6.94,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086210&page=1"
+  },
+  {
+    "id": "salto_guaira",
+    "fecha": "2026-10-20",
+    "nivel": 7.04,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086210&page=1"
+  },
+  {
+    "id": "cde",
+    "fecha": "2026-10-21",
+    "nivel": 28.54,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086248&page=1"
+  },
+  {
+    "id": "cde",
+    "fecha": "2026-10-20",
+    "nivel": 28.64,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086248&page=1"
+  },
+  {
+    "id": "cerrito",
+    "fecha": "2026-10-22",
+    "nivel": 6.76,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086253&page=1"
+  },
+  {
+    "id": "cerrito",
+    "fecha": "2026-10-21",
+    "nivel": 6.8,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086253&page=1"
+  },
+  {
+    "id": "cerrito",
+    "fecha": "2026-10-20",
+    "nivel": 6.9,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086253&page=1"
+  },
+  {
+    "id": "ita_piru",
+    "fecha": "2026-10-22",
+    "nivel": 8.92,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086257&page=1"
+  },
+  {
+    "id": "ita_piru",
+    "fecha": "2026-10-21",
+    "nivel": 8.88,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086257&page=1"
+  },
+  {
+    "id": "ita_piru",
+    "fecha": "2026-10-20",
+    "nivel": 8.7,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086257&page=1"
+  },
+  {
+    "id": "paso_patria",
+    "fecha": "2026-10-22",
+    "nivel": 7.84,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086258&page=1"
+  },
+  {
+    "id": "paso_patria",
+    "fecha": "2026-10-21",
+    "nivel": 7.66,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086258&page=1"
+  },
+  {
+    "id": "paso_patria",
+    "fecha": "2026-10-20",
+    "nivel": 7.66,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086258&page=1"
+  },
+  {
+    "id": "ayolas",
+    "fecha": "2026-10-22",
+    "nivel": 6.01,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086261&page=1"
+  },
+  {
+    "id": "ayolas",
+    "fecha": "2026-10-21",
+    "nivel": 6.2,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086261&page=1"
+  },
+  {
+    "id": "ayolas",
+    "fecha": "2026-10-20",
+    "nivel": 6.27,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086261&page=1"
+  },
+  {
+    "id": "panchito_lopez",
+    "fecha": "2026-10-22",
+    "nivel": 6.98,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086263&page=1"
+  },
+  {
+    "id": "panchito_lopez",
+    "fecha": "2026-10-21",
+    "nivel": 7.06,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086263&page=1"
+  },
+  {
+    "id": "panchito_lopez",
+    "fecha": "2026-10-20",
+    "nivel": 7.11,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086263&page=1"
+  },
+  {
+    "id": "coratei",
+    "fecha": "2026-10-22",
+    "nivel": 5.97,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086264&page=1"
+  },
+  {
+    "id": "coratei",
+    "fecha": "2026-10-21",
+    "nivel": 6.12,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086264&page=1"
+  },
+  {
+    "id": "coratei",
+    "fecha": "2026-10-20",
+    "nivel": 6.18,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086264&page=1"
+  },
+  {
+    "id": "ita_cora",
+    "fecha": "2026-10-22",
+    "nivel": 8.45,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086288&page=1"
+  },
+  {
+    "id": "ita_cora",
+    "fecha": "2026-10-21",
+    "nivel": 8.42,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086288&page=1"
+  },
+  {
+    "id": "ita_cora",
+    "fecha": "2026-10-20",
+    "nivel": 8.4,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086288&page=1"
+  },
+  {
+    "id": "san_cosme",
+    "fecha": "2026-10-22",
+    "nivel": 9.9,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086295&page=1"
+  },
+  {
+    "id": "san_cosme",
+    "fecha": "2026-10-21",
+    "nivel": 9.96,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086295&page=1"
+  },
+  {
+    "id": "san_cosme",
+    "fecha": "2026-10-20",
+    "nivel": 9.94,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086295&page=1"
+  },
+  {
+    "id": "encarnacion",
+    "fecha": "2026-10-22",
+    "nivel": 9.94,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086297&page=1"
+  },
+  {
+    "id": "encarnacion",
+    "fecha": "2026-10-21",
+    "nivel": 10.05,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086297&page=1"
+  },
+  {
+    "id": "encarnacion",
+    "fecha": "2026-10-20",
+    "nivel": 10.2,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086297&page=1"
+  },
+  {
+    "id": "pozo_hondo",
+    "fecha": "2026-10-22",
+    "nivel": 3.36,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086067&page=1"
+  },
+  {
+    "id": "pozo_hondo",
+    "fecha": "2026-10-21",
+    "nivel": 3.26,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086067&page=1"
+  },
+  {
+    "id": "pozo_hondo",
+    "fecha": "2026-10-20",
+    "nivel": 3.05,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086067&page=1"
+  },
+  {
+    "id": "estacion_arirai",
+    "fecha": "2026-10-22",
+    "nivel": 3.77,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086029&page=1"
+  },
+  {
+    "id": "estacion_arirai",
+    "fecha": "2026-10-21",
+    "nivel": 3.77,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086029&page=1"
+  },
+  {
+    "id": "estacion_arirai",
+    "fecha": "2026-10-20",
+    "nivel": 3.77,
+    "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086029&page=1"
+  }
+]

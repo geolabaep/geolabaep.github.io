@@ -31,7 +31,7 @@ function readDataContext(source){
   vm.runInContext(`${source}\nwindow.__DMH_SYNC__={DMH_AUTO_SEEDS};`,sandbox,{timeout:3000});
   return sandbox.__DMH_SYNC__;
 }
-function comparable(item){return {nivel:Number(item.nivel),variacion:Number(item.variacion),fecha:item.fecha,estado:item.estado||undefined};}
+function comparable(item){return {nivel:Number(item.nivel),variacion:Number(item.variacion),fecha:item.fecha,estado:item.estado||undefined,minimo:item.minimo,maximo:item.maximo};}
 function sameBulletin(existing,next){
   if(!existing)return false;const a=existing.estaciones||{},b=next.estaciones||{},ids=Object.keys(b);
   return ids.length===Object.keys(a).length&&ids.every(id=>a[id]&&JSON.stringify(comparable(a[id]))===JSON.stringify(comparable(b[id])));
@@ -73,7 +73,7 @@ function readHistory(dataSource){
 function bulletinFromParsed(parsed){
   const bulletin={fecha:parsed.latestDate,estaciones:{}};
   for(const row of parsed.observations){
-    bulletin.estaciones[row.id]={nivel:row.nivel,variacion:row.variacion,fecha:row.fecha};
+    bulletin.estaciones[row.id]={nivel:row.nivel,variacion:row.variacion,fecha:row.fecha,minimo:row.minimo,maximo:row.maximo,source:SOURCE};
     if(row.id==='villa_florida'&&row.fecha<parsed.latestDate)bulletin.estaciones[row.id].estado='antiguo';
   }
   return bulletin;
@@ -157,3 +157,4 @@ async function main(){
 }
 if(require.main===module)main().catch(error=>{console.error(`[DMH] ${error.message}`);process.exitCode=1;});
 module.exports={readDataContext,sameBulletin,emptyHistory,readHistory,bulletinFromParsed,upsertHistory,validateHistory,renderDataFromHistory,updateIndexCacheKey,paraguayToday,sourceRequestUrl};
+

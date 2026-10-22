@@ -1,22 +1,32 @@
 # GEOlab AEP · Observatorio Hidrológico
 
-Visor público de solo lectura: https://geolabaep.github.io/
+Versión de interfaz revisada el 22/10/2026, con datos DMH disponibles hasta esa fecha. Sitio estático: abrir `index.html` para revisar o publicar en GitHub Pages. No requiere instalación ni compilación.
 
-Los datos se comprueban automáticamente cuatro veces al día contra la fuente oficial DMH/DINAC. La actualización se valida antes de modificar el visor.
+## Organización
 
-## Persistencia de datos
+- `index.html`: estructura de la interfaz.
+- `css/observatorio.css`: diseño aprobado.
+- `js/`: mapa, análisis, historial y controles.
+- `data/historico-dmh.json`: historial automático acumulativo; no borrarlo ni reemplazarlo con versiones anteriores.
+- `data/datos.js`: datos base y copia derivada del historial automático.
+- `data/auditoria.js`: recuperación y cotejo histórico con DMH, con URL por lectura.
+- `assets/`: logotipos separados.
+- `vendor/leaflet.js`: motor cartográfico incluido.
+- `docs/`: informe de actualización y lecturas comprobadas.
+- `automation/` y `.github/workflows/`: actualización automática existente, ampliada para conservar también máximos y mínimos históricos publicados.
 
-- `data/historico-dmh.json` es el historial canónico acumulativo.
-- `data/datos.js` contiene una copia derivada para que el visor siga siendo estático y rápido.
-- El workflow actualiza y confirma ambos archivos junto con la clave anticaché de `index.html`.
-- Antes de guardar, se bloquea cualquier reducción del número de boletines o de estaciones de una fecha ya almacenada.
-- El workflow `Validar Observatorio` comprueba automáticamente datos, historial, sintaxis y archivos requeridos en cada cambio y solicitud de incorporación.
-- En futuras actualizaciones exclusivamente visuales no se debe reemplazar `data/historico-dmh.json`. El historial también queda recuperable mediante el historial de commits de GitHub.
+## Actualización
 
-## Publicación segura
+El workflow consulta DMH cuatro veces al día y puede ejecutarse desde Actions → Actualizar datos desde DMH → Run workflow. Solo guarda datos publicados; conserva la fecha real de cada estación y protege el historial contra reducciones. Actualiza datos, extremos históricos y clave de caché. Una caída de DMH conserva los datos guardados.
 
-- Las mejoras de interfaz deben revisarse primero en una rama o solicitud de incorporación.
-- Solo se publica en GitHub Pages después de integrar los cambios en `main`.
-- Los logotipos se almacenan como archivos en `assets/`; no deben volver a incrustarse en base64 dentro de `index.html`.
+Los gráficos no interpolan vacíos. Los nuevos máximos se distinguen en lila y los mínimos en rosa. En Monitoreo, los extremos abarcan el año hasta la fecha consultada; en Centro operativo, los últimos 30 días.
 
-Este repositorio no contiene el maestro ni herramientas administrativas.
+## Verificación local
+
+```sh
+node automation/test-dmh.js
+node automation/test-history.js
+node automation/validate-repository.js
+```
+
+Los mapas regionales y Leaflet están incluidos; los fondos alternativos y las tipografías web requieren conexión. Los datos no constituyen una alerta oficial.

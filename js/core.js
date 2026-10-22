@@ -122,6 +122,18 @@ function load(){
   .map(seed=>{const base=JSON.parse(JSON.stringify(seed));base.estado='publicado';return base});
  state.boletines.forEach(b=>{if(b.fecha!=='2025-02-28'&&b.estaciones?.villa_florida)delete b.estaciones.villa_florida});
  rebuildDataIndex();
+ const originalSeries=new Map([...DATA_INDEX.series].map(([id,rows])=>[id,rows.map(d=>({...d}))]));
+ const dates=new Map(state.boletines.map(b=>[b.fecha,b]));
+ for(const r of RECOVERED_READINGS){let b=dates.get(r.fecha);if(!b){b={fecha:r.fecha,estaciones:{},estado:'publicado'};dates.set(r.fecha,b);state.boletines.push(b)}const d=b.estaciones[r.id];if(!d||d.fecha!==r.fecha||d.nivel==null)b.estaciones[r.id]={fecha:r.fecha,nivel:r.nivel,variacion:null,source:r.source,recovered:true};}
+ rebuildDataIndex();
+ for(const r of RECOVERED_READINGS){const d=stationData(r.id,r.fecha);if(!d?.recovered)continue;const before=stationData(r.id,addDays(r.fecha,-1));d.variacion=before&&before.fecha===addDays(r.fecha,-1)?Math.round((d.nivel-before.nivel)*100)/100:null;}
+ rebuildDataIndex();
+ // Preserve older observations that only appeared as carried readings in a bulletin.
+ for(const [id,original] of originalSeries){const rows=DATA_INDEX.series.get(id)||[];const seen=new Set(rows.filter(d=>d.nivel!=null).map(d=>d.fecha));for(const d of original){if(d.nivel!=null&&!seen.has(d.fecha)){rows.push(d);seen.add(d.fecha)}}rows.sort((a,b)=>a.fechaBoletin.localeCompare(b.fechaBoletin));DATA_INDEX.series.set(id,rows)}
+ // Contrast each actual observation date with the official DMH table.
+ const validate=(id,d)=>{if(d.maximo&&d.minimo&&d.source){d.verified=true;return;}const v=VERIFIED_DMH[id+'|'+d.fecha];if(v&&d.nivel!=null){if(Math.round(d.nivel*100)!==Math.round(v.nivel*100))d.originalNivel=d.nivel;d.nivel=v.nivel;d.source=v.source;d.verified=true;}};
+ for(const b of state.boletines)for(const [id,d] of Object.entries(b.estaciones||{}))if(d)validate(id,d);
+ for(const [id,rows] of DATA_INDEX.series){for(const d of rows)validate(id,d);const byDate=new Map(rows.map(d=>[d.fecha,d]));for(const d of rows){const previous=byDate.get(addDays(d.fecha,-1));d.variacion=previous?Math.round((d.nivel-previous.nivel)*100)/100:null;}for(const b of state.boletines){const d=b.estaciones?.[id];if(d)d.variacion=byDate.get(d.fecha)?.variacion??null;}}
  state.fechaVista=boletin(todayISO())?todayISO():(DATA_INDEX.dates.at(-1)||todayISO());
 }
 function save(){ return false; }
@@ -149,3 +161,4 @@ function labelEstado(e){return{ok:'Actualizada',anterior:'Desactualizada',pendie
 function clsEstado(e){return e==='ok'?'st-ok':e==='sin'?'st-empty':'st-anterior'}
 function resumen(fecha=state.fechaVista){const key=`${DATA_INDEX.revision}:${fecha}`;if(DERIVED_CACHE.summary.has(key))return DERIVED_CACHE.summary.get(key);const b=boletin(fecha);let r={total:ESTACIONES_BASE.length,ok:0,pend:0,old:0,sin:0,anterior:0};ESTACIONES_BASE.forEach(s=>{const e=estadoEstacion(b?.estaciones?.[s.id],fecha);if(e==='ok')r.ok++;else if(e==='sin')r.sin++;else {r.pend++;r.anterior++}});DERIVED_CACHE.summary.set(key,r);return r}
 function setTab(t){const order={monitor:0,ops:1,history:2,method:3};const screen=qs(`#screen-${t}`),tab=qsa('.tab')[order[t]];if(!screen||!tab)return;qsa('.tab').forEach(x=>x.classList.remove('active'));qsa('.screen').forEach(x=>x.classList.remove('active'));screen.classList.add('active');tab.classList.add('active');if(t==='history')renderHistory();if(t==='ops')renderOps();if(t==='method')renderMethodology();setTimeout(()=>state.map?.invalidateSize(),100)}
+

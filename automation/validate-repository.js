@@ -26,3 +26,4 @@ if(!index.includes(`data-app-version="${version}"`))fail(`La versión ${version}
 
 const dates=history.boletines.map(item=>item.fecha);
 console.log(JSON.stringify({ok:true,version,boletines:dates.length,desde:dates[0],hasta:dates.at(-1),estacionesUltimoBoletin:Object.keys(history.boletines.at(-1).estaciones).length},null,2));
+
