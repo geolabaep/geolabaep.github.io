@@ -1900,3 +1900,91 @@ svg.leaflet-image-layer.leaflet-interactive path {
 }
 @media(max-height:500px) and (orientation:landscape){#map{height:80dvh;min-height:280px}.popup-card{max-height:65dvh}}
 @media(min-width:761px) and (max-width:900px){.top{flex-wrap:wrap;align-items:center}.brand{flex:1 1 440px}.header-meta{flex:1 1 220px;align-items:flex-start}.site-views{width:100%;max-width:360px}}
+
+/* Ajustes de revisión: indicadores discretos y detalle compacto */
+.header-meta{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px;max-width:540px}
+.header-meta .pill{font-size:10px;padding:5px 8px;white-space:nowrap}
+.site-views-pill strong{color:var(--green)}
+.series-tooltip-close{width:24px!important;height:24px!important;font-size:18px!important;border-radius:5px}
+@media(max-width:760px){.header-meta{display:flex!important;justify-content:flex-start;max-width:none;gap:5px;margin-top:8px}.header-meta>.pill{display:block!important;font-size:9px;padding:4px 6px}.header-meta>.pill:last-child{display:none!important}}
+/* Dos tarjetas de contexto y consulta de visualizaciones */
+.header-meta{display:flex;align-items:stretch;justify-content:flex-end;gap:8px;max-width:none;flex-wrap:wrap}
+.header-info-card,.header-views-card{border:1px solid var(--line);border-radius:10px;background:#ffffff03;padding:10px 12px;box-sizing:border-box;font-size:10px}
+.header-info-card{display:flex;flex-direction:column;justify-content:center;gap:9px;min-width:174px}
+.header-info-card>div{display:flex;flex-direction:column;gap:3px}.header-info-card span{color:var(--muted)}.header-info-card strong{font-size:11px;color:var(--text);font-weight:600}
+.header-views-card{min-width:245px;max-width:300px}.header-views-top{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted)}
+.header-views-top button{border:0;background:transparent;color:#a4ded5;font:inherit;font-size:10px;cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.header-views-values{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:8px 0}.header-views-values>div{display:flex;flex-direction:column;gap:3px}.header-views-values strong{font:600 17px 'JetBrains Mono',monospace;color:var(--text)}.header-views-values span{font-size:10px;color:var(--muted)}.header-views-card>small{font-size:9px;color:var(--muted);display:block;line-height:1.4}
+#views-dialog{width:min(590px,calc(100vw - 28px));max-height:85dvh;overflow:auto;padding:24px;border:1px solid #547386;border-radius:16px;background:#102b3d;color:#e9f0f5;box-shadow:0 20px 90px #0008}
+#views-dialog::backdrop{background:#05131db3}.views-dialog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}.views-dialog-head h2{font-size:22px;margin:8px 0 20px}.views-dialog-head button{width:32px;height:32px;flex-shrink:0;background:#ffffff08;border:1px solid var(--line);border-radius:7px;color:#e9f0f5;font-size:22px;cursor:pointer}
+.views-dialog-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.views-dialog-metrics>div{padding:14px 12px;background:#ffffff05;border:1px solid var(--line);border-radius:10px}.views-dialog-metrics span{display:block;color:var(--muted);font-size:11px}.views-dialog-metrics strong{display:block;font-size:26px;margin-top:9px;font-variant-numeric:tabular-nums}
+#views-detail-status{font-size:11px;line-height:1.6;color:#cfbd8c;margin:16px 0}.views-explanation{border-top:1px solid var(--line);padding-top:14px}.views-explanation h3{font-size:14px}.views-explanation p{font-size:12px;line-height:1.7;color:#b9ceda}.views-analytics-link{display:inline-block;color:#9eddd5;font-size:12px;padding:12px 0}.views-access-note{display:block;color:var(--muted);font-size:10px}
+@media(max-width:1200px){.top{flex-wrap:wrap}.header-meta{justify-content:flex-start}}
+@media(max-width:760px){.header-meta{display:grid!important;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:7px}.header-info-card,.header-views-card{min-width:0;max-width:none;padding:9px}.header-info-card strong{font-size:10px}.header-info-card span{font-size:9px}.header-views-top{flex-wrap:wrap;gap:2px;font-size:10px}.header-views-top button{font-size:10px;min-height:32px}.header-views-values{gap:7px;margin:6px 0}.header-views-values strong{font-size:16px}.header-views-card>small{font-size:8px}.views-dialog-head h2{font-size:19px}#views-dialog{padding:18px}.views-dialog-metrics>div{padding:11px 8px}.views-dialog-metrics span{font-size:10px}.views-dialog-metrics strong{font-size:23px}}
+@media(max-width:360px){.header-meta{grid-template-columns:1fr}.header-info-card{flex-direction:row;justify-content:space-between;gap:10px}.header-views-top{flex-wrap:nowrap}}
+/* Cabecera equilibrada: identidad y contexto en una misma franja */
+header{padding:16px 22px 12px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,440px);align-items:stretch;gap:24px}
+.brand{display:grid;grid-template-columns:164px minmax(0,1fr);gap:20px;align-items:center;min-width:0}
+.logos{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:14px;width:auto;min-height:88px;padding-right:18px;border-right:1px solid var(--line)}
+.logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:66px;height:62px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-box img,.logo-aep img,.logo-geo img{width:auto;height:auto;max-height:54px;max-width:66px;object-fit:contain}
+.brand-text h1{font-size:clamp(20px,1.75vw,27px);line-height:1.18;margin:0 0 8px;max-width:560px;text-wrap:balance}
+.brand-text .sub{font-size:11px;line-height:1.5;margin-top:3px;max-width:510px;color:var(--muted)}
+.header-meta{display:grid!important;grid-template-columns:minmax(160px,.85fr) minmax(220px,1.15fr);gap:10px;align-items:stretch;margin:0;max-width:none;width:100%}
+.header-info-card,.header-views-card{display:flex;flex-direction:column;justify-content:center;min-height:112px;min-width:0;max-width:none;padding:12px 14px;border-radius:10px;background:#ffffff03}
+.header-info-card{gap:12px}.header-info-card span{font-size:10px;line-height:1.4}.header-info-card strong{font-size:12px;line-height:1.4}
+.header-views-top{font-size:10px;line-height:1.4;gap:6px;flex-wrap:wrap}.header-views-top button{font-size:10px;padding:3px 0;min-height:24px}
+.header-views-values{margin:8px 0;gap:12px}.header-views-values strong{font-size:18px}.header-views-values span{font-size:10px}.header-views-card>small{font-size:9px;line-height:1.4}
+.tabs{margin-top:14px}
+@media(min-width:761px) and (max-width:1100px){
+ .top{grid-template-columns:1fr;gap:14px}.brand{grid-template-columns:164px minmax(0,1fr)}.brand-text h1{font-size:25px;max-width:none}.brand-text .sub{max-width:none}
+ .header-meta{grid-template-columns:1fr 1fr}.header-info-card{flex-direction:row;justify-content:space-around;align-items:center;gap:14px}.header-info-card,.header-views-card{min-height:94px}
+ .header-views-top{flex-wrap:nowrap}
+}
+@media(max-width:760px){
+ header{padding:12px 12px 9px}.top{grid-template-columns:minmax(0,1fr);gap:12px}
+ .brand{grid-template-columns:94px minmax(0,1fr);gap:12px}.logos{gap:8px;min-height:74px;padding-right:10px}.logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:36px;height:44px}.logo-box img,.logo-aep img,.logo-geo img{max-width:36px;max-height:40px}
+ .brand-text h1{font-size:19px;line-height:1.18;margin-bottom:5px}.brand-text .sub{font-size:10px;line-height:1.4}.brand-text .sub:first-of-type{display:block}
+ .header-meta{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px;margin:0!important}
+ .header-info-card,.header-views-card{min-height:110px;padding:10px;flex-direction:column;align-items:stretch;justify-content:center}.header-info-card{gap:10px}.header-info-card span{font-size:9px}.header-info-card strong{font-size:11px}
+ .header-views-top{font-size:10px;flex-wrap:wrap}.header-views-top button{min-height:28px;font-size:10px}.header-views-values{gap:8px;margin:6px 0}.header-views-values strong{font-size:17px}.header-views-values span{font-size:9px}.header-views-card>small{font-size:8px}
+ .tabs{margin-top:12px}
+}
+@media(max-width:360px){
+ .brand{grid-template-columns:80px minmax(0,1fr);gap:9px}.logos{padding-right:7px;gap:6px}.logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:31px}.logo-box img,.logo-aep img,.logo-geo img{max-width:31px;max-height:36px}.brand-text h1{font-size:17px}
+ .header-meta{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.header-info-card,.header-views-card{padding:8px}.header-views-values{gap:5px}
+}
+
+/* Identidad institucional con mayor presencia */
+.brand{grid-template-columns:224px minmax(0,1fr)}
+.logos{gap:18px;padding-right:20px;min-height:100px}
+.logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:92px;height:88px}
+.logo-box img,.logo-aep img,.logo-geo img{max-width:92px;max-height:82px;width:auto;height:auto}
+@media(min-width:761px) and (max-width:1100px){.brand{grid-template-columns:224px minmax(0,1fr)}}
+@media(max-width:760px){
+ .brand{grid-template-columns:134px minmax(0,1fr);gap:12px}
+ .logos{gap:10px;padding-right:10px;min-height:90px}
+ .logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:56px;height:68px}
+ .logo-box img,.logo-aep img,.logo-geo img{max-width:56px;max-height:64px}
+}
+@media(max-width:360px){
+ .brand{grid-template-columns:122px minmax(0,1fr);gap:10px}
+ .logos{gap:8px;padding-right:8px}
+ .logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:52px;height:64px}
+ .logo-box img,.logo-aep img,.logo-geo img{max-width:52px;max-height:60px}
+}
+
+/* Logos grandes para revisión */
+.brand{grid-template-columns:306px minmax(0,1fr)}
+.logos{gap:20px;padding-right:22px;min-height:128px}
+.logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:132px;height:120px}
+.logo-box img,.logo-aep img,.logo-geo img{max-width:132px;max-height:114px;width:auto;height:auto}
+@media(min-width:761px) and (max-width:1100px){.brand{grid-template-columns:306px minmax(0,1fr)}}
+@media(max-width:760px){
+ .brand{grid-template-columns:minmax(0,1fr);gap:10px}
+ .logos{justify-content:flex-start;gap:22px;min-height:100px;padding-right:0;border-right:0}
+ .logo-box,.logo-box.logo-aep,.logo-box.logo-geo{width:104px;height:96px}
+ .logo-box img,.logo-aep img,.logo-geo img{max-width:104px;max-height:92px}
+ .brand-text h1{font-size:21px}
+}

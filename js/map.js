@@ -23,7 +23,7 @@ function initMap(){
  };
  const control=L.control({position:'topright'});control.onAdd=()=>{const box=L.DomUtil.create('div','basemap-picker');box.innerHTML='<label for="basemap-select">Mapa base</label><select id="basemap-select">'+Object.entries(state.baseMaps).map(([key,item])=>'<option value="'+key+'">'+item.label+'</option>').join('')+'</select><div class="basemap-status" role="status">Cargando cartografía…</div>';L.DomEvent.disableClickPropagation(box);L.DomEvent.disableScrollPropagation(box);state.mapStatus=box.querySelector('.basemap-status');state.baseMapSelect=box.querySelector('select');state.baseMapSelect.onchange=e=>setBasemap(e.target.value);return box;};control.addTo(state.map);
  for(const [key,item] of Object.entries(state.baseMaps))for(const layer of item.layers){layer.on('tileload',()=>{if(state.activeBasemap===key){state.baseMapLoaded=true;if(state.mapStatus)state.mapStatus.textContent=key==='included'?'Localidades incluidas · detalle regional':'Visible: '+item.label;}});layer.on('tileerror',()=>{if(state.activeBasemap===key&&state.mapStatus)state.mapStatus.textContent=state.baseMapLoaded?'Algunas imágenes no cargaron. Probá otra base.':'Sin acceso al mapa en línea. Elegí Mapa regional · sin conexión.';});}
- setBasemap('included');
+ setBasemap('osm');
  renderMarkers();addMapLegend();
  if(typeof ResizeObserver!=='undefined'){state.mapResizeObserver?.disconnect();state.mapResizeObserver=new ResizeObserver(()=>state.map?.invalidateSize(false));state.mapResizeObserver.observe(target)}
  setTimeout(()=>{state.map?.invalidateSize(false);applyInitialMapView(state.map)},150);return true;
