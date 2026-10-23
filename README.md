@@ -36,3 +36,11 @@ Los mapas regionales y Leaflet están incluidos; los fondos alternativos y las t
 ## Estadísticas de visitas
 
 Google Analytics 4 está integrado con el ID `G-PK379JHWXH`. Se activa al publicar en `geolabaep.github.io`. Las estadísticas se consultan en [Google Analytics](https://analytics.google.com/) con la cuenta autorizada, seleccionando el período diario, semanal o mensual. Las vistas previas locales no registran visitas.
+
+## Contador visible en el encabezado
+
+El panel muestra visualizaciones de hoy y de los últimos 7 y 30 días. Para leer los totales reales requiere habilitar la conexión de lectura con Analytics: [pasos de configuración](docs/ACTIVAR_VISUALIZACIONES.md). Hasta configurarla muestra estadísticas pendientes; no simula visitas.
+
+## Vista móvil
+
+Navegación en dos columnas, controles táctiles, mapa sobre la lista de estaciones y serie temporal ajustada al ancho disponible. Centro operativo conserva todas las columnas con desplazamiento horizontal y estación fija. El gráfico se adapta al cambiar la orientación del dispositivo.
