@@ -1,62 +1,32 @@
-# GEOlab AEP · Observatorio Hidrológico
+# Observatorio Hidrológico — paquete basado en tu HTML
 
-**Acceder al observatorio:** [https://geolabaep.github.io/](https://geolabaep.github.io/)
+**Acceso:** https://geolabaep.github.io/
 
-Versión de interfaz revisada el 27/10/2026, con datos DMH disponibles hasta el 27/10/2026. Cada estación conserva la fecha real de su última lectura. Sitio estático: abrir `index.html` para revisar o publicar en GitHub Pages. No requiere instalación ni compilación.
+Base exclusiva: `Vista_previa_Observatorio(1).html`, enviado por la usuaria el 27/10/2026. No se sustituyeron el diseño, las funciones ni las series por archivos de paquetes anteriores. El contenido visual y los scripts originales se conservaron; únicamente se extrajo el bloque de datos a `data/datos.js` y se agregó el lector de totales de Analytics.
 
-## Organización
+## Subir a GitHub
 
-- `index.html`: estructura de la interfaz.
-- `css/observatorio.css`: diseño aprobado.
-- `js/`: mapa, análisis, historial y controles.
-- `data/historico-dmh.json`: historial automático acumulativo; no borrarlo ni reemplazarlo con versiones anteriores.
-- `data/datos.js`: datos base y copia derivada del historial automático.
-- `data/auditoria.js`: recuperación y cotejo histórico con DMH, con URL por lectura.
-- `assets/`: logotipos separados.
-- `vendor/leaflet.js`: motor cartográfico incluido.
-- `docs/`: informe de actualización y lecturas comprobadas.
-- `automation/` y `.github/workflows/`: actualización automática existente, ampliada para conservar también máximos y mínimos históricos publicados.
+1. Extraer el ZIP y abrir `sitio`.
+2. En https://github.com/geolabaep/geolabaep.github.io elegir **Add file → Upload files**.
+3. Subir todo el CONTENIDO de `sitio`, incluida `.github`, a la raíz. No subir la carpeta contenedora ni el ZIP. No borrar previamente el repositorio.
+4. Guardar con **Commit changes**. Los archivos antiguos de css, assets y vendor pueden permanecer: este index conserva los recursos del HTML incorporados y no los carga.
+5. En **Settings → Pages → Source** seleccionar **GitHub Actions**.
+6. En **Actions → Publicar observatorio → Run workflow**, ejecutar y esperar a que termine correctamente.
+7. En **Actions → Actualizar visualizaciones → Run workflow**, ejecutar la consulta. Después se ejecuta Publicar observatorio automáticamente.
+8. Abrir https://geolabaep.github.io/ y recargar con Ctrl+F5.
 
-## Actualización
+## Visualizaciones
 
-El workflow consulta DMH cuatro veces al día y puede ejecutarse desde Actions → Actualizar datos desde DMH → Run workflow. Solo guarda datos publicados; conserva la fecha real de cada estación y protege el historial contra reducciones. Actualiza datos, extremos históricos y clave de caché. Una caída de DMH conserva los datos guardados.
+Requiere la variable `GA4_PROPERTY_ID=560217022` y el secreto `GA4_SERVICE_ACCOUNT_JSON` ya configurados en GitHub. La clave privada no está en el paquete. Si la consulta termina bien, `data/visualizaciones.json` cambia a `status: ready` y muestra today, week y month. Las visitas se consultan cada seis horas y pueden tener demora. Se cuentan visualizaciones, incluidas repeticiones, no personas únicas.
 
-Los gráficos no interpolan vacíos. Los nuevos máximos se distinguen en lila y los mínimos en rosa. En Monitoreo, los extremos abarcan el año hasta la fecha consultada; en Centro operativo, los últimos 30 días.
+El HTML recibido tenía la tarjeta pero no el lector de este archivo. Se agregó `js/site-views.js`. La prueba real de acceso a Analytics todavía debe ejecutarse en GitHub: este paquete no contiene estadísticas inventadas.
 
-## Verificación local
+## Datos y actualizaciones
 
-```sh
-node automation/test-dmh.js
-node automation/test-history.js
-node automation/validate-repository.js
-```
+Se conservaron exactamente los datos del HTML recibido: 98 boletines automáticos, hasta 27/10/2026, además de sus series base y lecturas recuperadas incorporadas. Las fechas reales por estación se conservan. La automatización DMH continúa actualizando el bloque externo de datos cuatro veces al día. Los registros históricos recuperados que están dentro del HTML se conservan sin cambios.
 
-Los mapas regionales y Leaflet están incluidos; los fondos alternativos y las tipografías web requieren conexión. Los datos no constituyen una alerta oficial.
+Si subís este paquete después de que el repositorio incorpore boletines posteriores al 27/10, no sobrescribas esos datos con una versión más antigua.
 
-## Estadísticas de visitas
+## Verificación
 
-Google Analytics 4 está integrado con el ID `G-PK379JHWXH`. Se activa al publicar en `geolabaep.github.io`. Las estadísticas se consultan en [Google Analytics](https://analytics.google.com/) con la cuenta autorizada, seleccionando el período diario, semanal o mensual. Las vistas previas locales no registran visitas.
-
-## Contador visible en el encabezado
-
-El panel muestra visualizaciones de hoy y de los últimos 7 y 30 días. Para leer los totales reales requiere habilitar la conexión de lectura con Analytics: [pasos de configuración](docs/ACTIVAR_VISUALIZACIONES.md). Hasta configurarla muestra estadísticas pendientes; no simula visitas.
-
-## Vista móvil
-
-Encabezado compacto, visualizaciones accesibles mediante un botón, navegación en una fila y controles táctiles, mapa sobre la lista de estaciones y serie temporal ajustada al ancho disponible. Centro operativo conserva todas las columnas con desplazamiento horizontal y estación fija. El gráfico se adapta al cambiar la orientación del dispositivo.
-
-## Publicación en GitHub Pages
-
-En Settings → Pages, seleccionar Source: **GitHub Actions**. El workflow Publicar observatorio publica la rama predeterminada después de una carga y tras cada actualización correcta de DMH o visualizaciones. Esto permite publicar también los commits automáticos realizados por GITHUB_TOKEN.
-
-La conexión de Analytics utiliza la variable `GA4_PROPERTY_ID=560217022` y el secreto `GA4_SERVICE_ACCOUNT_JSON` configurados en el repositorio. Las credenciales no se incluyen en estos archivos. Para probar: Actions → Actualizar visualizaciones → Run workflow; verificar que data/visualizaciones.json tenga status ready y esperar a Publicar observatorio.
-
-## Cambios incluidos en la versión 3.9.1
-
-- Recuperación de 11 lecturas publicadas por DMH en 8 estaciones; fuente individual en `docs/recuperacion_fechas_2026-10-27.json`.
-- Círculos lilas en todas las fechas que superan el máximo histórico anterior, aunque no establezcan otro récord.
-- Panel «Nuevos máximos históricos», con máximos del año ordenados por fecha alcanzada.
-- Calendario con fechas disponibles en verde y sin datos en rojo; rango independiente para descargar CSV.
-- Encabezado móvil compacto, estadísticas desplegables y detalle de la serie con cierre.
-
-Persisten 53 días sin lectura dentro de las series operativas. No se estiman ni interpolan valores. La consulta histórica de Humaitá quedó incompleta por interrupciones de DMH. No se ha comprobado la conexión privada de Analytics desde este entorno: ejecutar el workflow después de subir el paquete.
+Se comprobó la equivalencia exacta entre el HTML recibido y el index publicado al revertir las dos adaptaciones indicadas, la sintaxis de sus 13 scripts y el formato del historial. El SHA-256 de la fuente se registra en version.json. No se ha realizado una prueba visual en un navegador ni se ha verificado la conexión privada real de Analytics.

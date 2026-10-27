@@ -1,0 +1,5 @@
+Este paquete usa exclusivamente el HTML que enviaste.
+
+Abrí README.md para ver las instrucciones de carga y activación.
+Subí el contenido de sitio a la raíz de tu repositorio, incluida .github.
+No subas el JSON privado de Google Cloud.

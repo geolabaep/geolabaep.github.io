@@ -1,4 +1,5 @@
 
+
 /* ==========================================================
    CAPA DE DATOS EMBEBIDOS · v3.7.7
    Separada de la lógica de interfaz para facilitar una futura
@@ -19042,4 +19043,5 @@ window.OBSERVATORIO_DATA_INFO = Object.freeze({
   semillas: SEEDS.length + EXTRA_SEEDS.length + DMH_AUTO_SEEDS.length + 1,
   ultimaFecha: [...SEEDS,...DMH_AUTO_SEEDS].at(-1)?.fecha || null
 });
+
 
