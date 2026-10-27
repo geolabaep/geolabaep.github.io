@@ -2,7 +2,7 @@
 
 **Acceder al observatorio:** [https://geolabaep.github.io/](https://geolabaep.github.io/)
 
-Versión de interfaz revisada el 22/10/2026, con datos DMH disponibles hasta esa fecha. Sitio estático: abrir `index.html` para revisar o publicar en GitHub Pages. No requiere instalación ni compilación.
+Versión de interfaz revisada el 27/10/2026, con datos DMH disponibles hasta el 27/10/2026. Cada estación conserva la fecha real de su última lectura. Sitio estático: abrir `index.html` para revisar o publicar en GitHub Pages. No requiere instalación ni compilación.
 
 ## Organización
 
@@ -43,4 +43,20 @@ El panel muestra visualizaciones de hoy y de los últimos 7 y 30 días. Para lee
 
 ## Vista móvil
 
-Navegación en dos columnas, controles táctiles, mapa sobre la lista de estaciones y serie temporal ajustada al ancho disponible. Centro operativo conserva todas las columnas con desplazamiento horizontal y estación fija. El gráfico se adapta al cambiar la orientación del dispositivo.
+Encabezado compacto, visualizaciones accesibles mediante un botón, navegación en una fila y controles táctiles, mapa sobre la lista de estaciones y serie temporal ajustada al ancho disponible. Centro operativo conserva todas las columnas con desplazamiento horizontal y estación fija. El gráfico se adapta al cambiar la orientación del dispositivo.
+
+## Publicación en GitHub Pages
+
+En Settings → Pages, seleccionar Source: **GitHub Actions**. El workflow Publicar observatorio publica la rama predeterminada después de una carga y tras cada actualización correcta de DMH o visualizaciones. Esto permite publicar también los commits automáticos realizados por GITHUB_TOKEN.
+
+La conexión de Analytics utiliza la variable `GA4_PROPERTY_ID=560217022` y el secreto `GA4_SERVICE_ACCOUNT_JSON` configurados en el repositorio. Las credenciales no se incluyen en estos archivos. Para probar: Actions → Actualizar visualizaciones → Run workflow; verificar que data/visualizaciones.json tenga status ready y esperar a Publicar observatorio.
+
+## Cambios incluidos en la versión 3.9.1
+
+- Recuperación de 11 lecturas publicadas por DMH en 8 estaciones; fuente individual en `docs/recuperacion_fechas_2026-10-27.json`.
+- Círculos lilas en todas las fechas que superan el máximo histórico anterior, aunque no establezcan otro récord.
+- Panel «Nuevos máximos históricos», con máximos del año ordenados por fecha alcanzada.
+- Calendario con fechas disponibles en verde y sin datos en rojo; rango independiente para descargar CSV.
+- Encabezado móvil compacto, estadísticas desplegables y detalle de la serie con cierre.
+
+Persisten 53 días sin lectura dentro de las series operativas. No se estiman ni interpolan valores. La consulta histórica de Humaitá quedó incompleta por interrupciones de DMH. No se ha comprobado la conexión privada de Analytics desde este entorno: ejecutar el workflow después de subir el paquete.

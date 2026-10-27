@@ -1,0 +1,97 @@
+{
+  "consultado": "2026-10-27",
+  "recuperadas": 11,
+  "porEstacion": {
+    "puerto_ladario": 2,
+    "puerto_murtinho": 2,
+    "caceres": 2,
+    "rosario": 1,
+    "salto_guaira": 1,
+    "cde": 1,
+    "encarnacion": 1,
+    "estacion_arirai": 1
+  },
+  "conflictos": [],
+  "errores": [
+    {
+      "id": "humaita",
+      "errores": [
+        "The read operation timed out"
+      ]
+    },
+    {
+      "id": "villa_florida",
+      "errores": [
+        "Sin serie operativa en el período"
+      ]
+    }
+  ],
+  "lecturas": [
+    {
+      "id": "puerto_ladario",
+      "fecha": "2026-10-23",
+      "nivel": 1.2,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082001&page=1"
+    },
+    {
+      "id": "puerto_ladario",
+      "fecha": "2026-10-21",
+      "nivel": 1.23,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082001&page=1"
+    },
+    {
+      "id": "puerto_murtinho",
+      "fecha": "2026-10-23",
+      "nivel": 3.01,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082002&page=1"
+    },
+    {
+      "id": "puerto_murtinho",
+      "fecha": "2026-10-21",
+      "nivel": 3.2,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082002&page=1"
+    },
+    {
+      "id": "caceres",
+      "fecha": "2026-10-23",
+      "nivel": 0.98,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082003&page=1"
+    },
+    {
+      "id": "caceres",
+      "fecha": "2026-10-21",
+      "nivel": 1.16,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000082003&page=1"
+    },
+    {
+      "id": "rosario",
+      "fecha": "2026-10-24",
+      "nivel": 3.22,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086183&page=1"
+    },
+    {
+      "id": "salto_guaira",
+      "fecha": "2026-10-25",
+      "nivel": 7.29,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086210&page=1"
+    },
+    {
+      "id": "cde",
+      "fecha": "2026-10-23",
+      "nivel": 28.58,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086248&page=1"
+    },
+    {
+      "id": "encarnacion",
+      "fecha": "2026-10-25",
+      "nivel": 10.0,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086297&page=1"
+    },
+    {
+      "id": "estacion_arirai",
+      "fecha": "2026-10-23",
+      "nivel": 3.78,
+      "source": "https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086029&page=1"
+    }
+  ]
+}

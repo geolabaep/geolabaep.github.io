@@ -1,8 +1,8 @@
 {
-  "version": "3.8.2",
+  "version": "3.9.1",
   "url": "https://geolabaep.github.io/",
-  "builtAt": "2026-07-21T15:30:00.000Z",
+  "builtAt": "2026-10-27",
   "mode": "public-read-only",
-  "cost": "free"
+  "cost": "free",
+  "dataThrough": "2026-10-27"
 }
-

@@ -6,7 +6,7 @@ const b64=value=>Buffer.from(typeof value==='string'?value:JSON.stringify(value)
 async function main(){
   const property=process.env.GA4_PROPERTY_ID;
   const credentials=process.env.GA4_SERVICE_ACCOUNT_JSON;
-  if(!property||!credentials){console.log('Configurar GA4_PROPERTY_ID y GA4_SERVICE_ACCOUNT_JSON para publicar estadísticas.');return;}
+  if(!property||!credentials){throw new Error('Configurar GA4_PROPERTY_ID y GA4_SERVICE_ACCOUNT_JSON para publicar estadísticas.');}
   if(!/^\d+$/.test(property))throw new Error('GA4_PROPERTY_ID debe ser el ID numérico de la propiedad.');
   const account=JSON.parse(credentials),now=Math.floor(Date.now()/1000);
   const message=b64({alg:'RS256',typ:'JWT'})+'.'+b64({iss:account.client_email,scope:'https://www.googleapis.com/auth/analytics.readonly',aud:'https://oauth2.googleapis.com/token',iat:now,exp:now+3600});
