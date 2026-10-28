@@ -19032,6 +19032,446 @@ const DMH_AUTO_SEEDS = [
         source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
       }
     }
+  },
+  {
+    fecha: "2026-10-28",
+    estaciones: {
+      puerto_ladario: {
+        nivel: 1.13,
+        variacion: -0.03,
+        fecha: "2026-10-26",
+        minimo: {
+          nivel: -0.68,
+          fecha: "2024-10-16"
+        },
+        maximo: {
+          nivel: 4.24,
+          fecha: "2023-07-18"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      puerto_murtinho: {
+        nivel: 2.8,
+        variacion: -0.08,
+        fecha: "2026-10-26",
+        minimo: {
+          nivel: 0.53,
+          fecha: "2024-10-24"
+        },
+        maximo: {
+          nivel: 9.75,
+          fecha: "1982-06-26"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      caceres: {
+        nivel: 0.86,
+        variacion: -0.03,
+        fecha: "2026-10-26",
+        minimo: {
+          nivel: 0.26,
+          fecha: "2021-09-27"
+        },
+        maximo: {
+          nivel: 5.47,
+          fecha: "2023-03-29"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      isla_margarita: {
+        nivel: 2.83,
+        variacion: -0.1,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.54,
+          fecha: "2024-10-23"
+        },
+        maximo: {
+          nivel: 7.7,
+          fecha: "2018-03-12"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      fuerte_olimpo: {
+        nivel: 3.27,
+        variacion: 0.1,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -1.58,
+          fecha: "1971-10-26"
+        },
+        maximo: {
+          nivel: 9.6,
+          fecha: "1988-06-09"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      bahia_negra: {
+        nivel: 2.98,
+        variacion: -0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -1.32,
+          fecha: "1971-09-26"
+        },
+        maximo: {
+          nivel: 6.95,
+          fecha: "1982-06-13"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      vallemi: {
+        nivel: 2.69,
+        variacion: -0.03,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.42,
+          fecha: "1971-09-24"
+        },
+        maximo: {
+          nivel: 8.56,
+          fecha: "1982-06-24"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      concepcion: {
+        nivel: 2.3,
+        variacion: -0.12,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.34,
+          fecha: "1968-01-07"
+        },
+        maximo: {
+          nivel: 8.66,
+          fecha: "1992-05-20"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      rosario: {
+        nivel: 3.1,
+        variacion: -0.09,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.62,
+          fecha: "2024-10-30"
+        },
+        maximo: {
+          nivel: 8.03,
+          fecha: "1983-06-03"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      puerto_antequera: {
+        nivel: 2.62,
+        variacion: -0.18,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.49,
+          fecha: "2024-10-31"
+        },
+        maximo: {
+          nivel: 6.02,
+          fecha: "2023-03-17"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      villeta: {
+        nivel: 3.48,
+        variacion: -0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -1.21,
+          fecha: "2024-11-01"
+        },
+        maximo: {
+          nivel: 8.94,
+          fecha: "1983-05-30"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      asuncion: {
+        nivel: 2.99,
+        variacion: -0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -1.61,
+          fecha: "2024-11-02"
+        },
+        maximo: {
+          nivel: 9.01,
+          fecha: "1983-05-29"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      ita_enramada: {
+        nivel: 3.47,
+        variacion: -0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -1.04,
+          fecha: "2024-11-01"
+        },
+        maximo: {
+          nivel: 5.8,
+          fecha: "2023-03-26"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      humaita: {
+        nivel: 6.62,
+        variacion: 0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.25,
+          fecha: "2021-10-02"
+        },
+        maximo: {
+          nivel: 7.74,
+          fecha: "2019-06-07"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      alberdi: {
+        nivel: 5.59,
+        variacion: 0.05,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.77,
+          fecha: "2024-11-08"
+        },
+        maximo: {
+          nivel: 10.14,
+          fecha: "1992-06-10"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      pilar: {
+        nivel: 6.44,
+        variacion: 0.06,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.49,
+          fecha: "1944-10-06"
+        },
+        maximo: {
+          nivel: 10.05,
+          fecha: "1983-05-29"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      puerto_tigre: {
+        nivel: 7.02,
+        variacion: 0.13,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 2.01,
+          fecha: "2026-04-09"
+        },
+        maximo: {
+          nivel: 7.81,
+          fecha: "2023-11-29"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      salto_guaira: {
+        nivel: 7.35,
+        variacion: 0.11,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 3.16,
+          fecha: "2020-12-13"
+        },
+        maximo: {
+          nivel: 10.03,
+          fecha: "2026-05-09"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      cde: {
+        nivel: 27.82,
+        variacion: 0.53,
+        fecha: "2026-10-26",
+        minimo: {
+          nivel: 2.71,
+          fecha: "2021-07-05"
+        },
+        maximo: {
+          nivel: 32.96,
+          fecha: "2026-10-15"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      cerrito: {
+        nivel: 6.6,
+        variacion: -0.06,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.4,
+          fecha: "2021-12-29"
+        },
+        maximo: {
+          nivel: 6.9,
+          fecha: "2026-10-20"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      ita_piru: {
+        nivel: 8.9,
+        variacion: 0,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.02,
+          fecha: "2022-02-04"
+        },
+        maximo: {
+          nivel: 9.94,
+          fecha: "2021-05-08"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      paso_patria: {
+        nivel: 7.82,
+        variacion: 0.02,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.01,
+          fecha: "2022-01-13"
+        },
+        maximo: {
+          nivel: 9.83,
+          fecha: "2025-09-20"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      ayolas: {
+        nivel: 5.89,
+        variacion: -0.15,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0,
+          fecha: "2007-09-13"
+        },
+        maximo: {
+          nivel: 6.65,
+          fecha: "1997-02-07"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      panchito_lopez: {
+        nivel: 6.79,
+        variacion: -0.11,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.1,
+          fecha: "2020-10-23"
+        },
+        maximo: {
+          nivel: 7.23,
+          fecha: "2026-10-19"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      coratei: {
+        nivel: 5.85,
+        variacion: -0.14,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: -0.29,
+          fecha: "2022-02-22"
+        },
+        maximo: {
+          nivel: 6.35,
+          fecha: "2023-11-07"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      ita_cora: {
+        nivel: 8.35,
+        variacion: 0,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.6,
+          fecha: "2021-05-24"
+        },
+        maximo: {
+          nivel: 8.45,
+          fecha: "2026-10-22"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      san_cosme: {
+        nivel: 9.7,
+        variacion: -0.2,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0.75,
+          fecha: "2025-03-28"
+        },
+        maximo: {
+          nivel: 10.38,
+          fecha: "2026-10-18"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      encarnacion: {
+        nivel: 9.81,
+        variacion: -0.09,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 3.1,
+          fecha: "2026-04-11"
+        },
+        maximo: {
+          nivel: 12,
+          fecha: "2023-12-31"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      pozo_hondo: {
+        nivel: 3.33,
+        variacion: 0.1,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 0,
+          fecha: "2024-12-10"
+        },
+        maximo: {
+          nivel: 5.73,
+          fecha: "2026-01-24"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      },
+      villa_florida: {
+        nivel: 0.32,
+        variacion: 0.32,
+        fecha: "2025-02-28",
+        minimo: {
+          nivel: -0.01,
+          fecha: "2023-02-14"
+        },
+        maximo: {
+          nivel: 5.66,
+          fecha: "2023-11-07"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php",
+        estado: "antiguo"
+      },
+      estacion_arirai: {
+        nivel: 3.67,
+        variacion: -0.05,
+        fecha: "2026-10-28",
+        minimo: {
+          nivel: 2.06,
+          fecha: "2024-10-09"
+        },
+        maximo: {
+          nivel: 6.78,
+          fecha: "2023-07-29"
+        },
+        source: "https://www.meteorologia.gov.py/nivel-rio/indexconvencional.php"
+      }
+    }
   }
 ];
 /* DMH_AUTO_END */
